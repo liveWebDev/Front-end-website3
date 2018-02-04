@@ -1,0 +1,161 @@
+@import "../styles/_variables";
+@import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables";
+@import "../styles/_mixins";
+@import "../styles/_buttons";
+@import "../deal/deal";
+
+.user-profile {
+  .user-photo {
+    float:left;
+    width:200px;
+
+    .user-photo-container {
+      position:relative;
+
+      img {
+        width:100%;
+      }
+
+      .avatar-loader {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(255, 255, 255, 0.6);
+
+        .loader-gear {
+          position:absolute;
+          top:50%;
+          height:36px;
+          margin-top:-18px;
+          width:100%;
+          text-align:center;
+
+          .fa {
+            line-height:36px;
+            font-size:36px;
+          }
+        }
+      }
+    }
+  }
+
+  .user-info-block {
+    margin-left:240px;
+
+    .user-name {
+      font-size:27px;
+      font-weight:500;
+      color: $left-sidebar-font-color-dark;
+    }
+
+    .update-link {
+      margin-left:5px;
+      color:#B5BDC2;
+      font-size:15px;
+
+      .s {
+        vertical-align: baseline;
+      }
+    }
+  }
+}
+
+.avatar-options {
+  margin-top:15px;
+
+  li {
+    margin-bottom:15px;
+
+    a {
+      text-decoration: none;
+      border-bottom:1px dotted;
+      font-weight:300;
+      color: $font-color;
+
+      &:hover {
+        color: $color-blue;
+      }
+    }
+
+    .upload-avatar-label {
+      cursor: pointer;
+
+      span {
+        text-decoration: none;
+        border-bottom:1px dotted;
+        font-weight:300;
+        color: $font-color;
+
+
+        &:hover {
+          color: $color-blue;
+        }
+      }
+
+      input[type=file] {
+        display:none;
+      }
+    }
+  }
+}
+
+.activity-list {
+  font-weight:300;
+
+  .activity-item {
+    margin-bottom:10px;
+
+    .activity-item-date {
+      float:left;
+      width:145px;
+      color:#AFAFAF;
+      font-weight:300;
+    }
+
+    .activity-item-title {
+      margin-left:160px;
+
+      .system-descr {
+        color:#F48168;
+      }
+    }
+  }
+}
+
+.contact-list.profile-view {
+  border:0;
+  background: none;
+
+
+  .contact-item {
+    padding:0;
+    box-shadow: none;
+
+
+    .contact-head-title {
+      font-size:19px;
+      text-transform: none;
+      color:#49516A;
+      font-weight:300;
+      margin:10px 0 14px 0;
+    }
+
+    .contact-field {
+      .contact-field-name {
+        width:100px;
+        font-weight:400;
+        color:$left-sidebar-font-color-dark;
+
+        .fa {
+          width:20px;
+        }
+      }
+
+      .contact-field-value {
+        margin-left:100px;
+      }
+    }
+  }
+}

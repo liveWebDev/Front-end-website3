@@ -1,0 +1,51 @@
+.deal-creator {
+  border:1px solid #CED5DB;
+  background:#F8FBFD;
+  position:relative;
+  padding:5px;
+
+  @include border-radius(5px);
+
+  input[type=text] {
+    border:none;
+    background:none;
+    height:36px;
+    color: #242432;
+    font-weight: 400;
+
+    &::input-placeholder,
+    &::-webkit-input-placeholder,
+    &::-moz-placeholder,
+    &:-ms-input-placeholder {
+      font-weight: 300;
+      color: #B5BDC2;
+    }
+
+    &.partner-input {
+      width:30%;
+    }
+
+    &.name-input {
+      width:68%;
+      padding-right:145px;
+      border-left:1px solid #CFD8DE;
+      padding-left:12px;
+
+      @include border-radius(0);
+    }
+  }
+
+  .deal-button {
+    position:absolute;
+    top:5px;
+    right:5px;
+
+    @include button-size(36px);
+  }
+}
+
+.modal {
+  .deal-creator {
+        background:#fff;
+  }
+}

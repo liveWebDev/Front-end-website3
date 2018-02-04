@@ -1,0 +1,44 @@
+<div class="header">
+  <a ui-sref="main.inbox.list.create({email : email, bucket : 'inbox'})" class="back-link"><i class="s s-back"></i></a>
+  <h1>
+    {{ email }} - info
+  </h1>
+</div>
+<div class="block-inner">
+
+  Added at {{ stats.creation_date | date:'medium' }}
+
+  <div class="inbox-stats-list">
+    <div class="stats-row">
+      <div class="stats-name">Threads</div>
+      <div class="stats-value">{{ stats.threads }}</div>
+    </div>
+  </div>
+
+  <div class="inbox-stats-list">
+    <div class="stats-row">
+      <div class="stats-name">Deals linked</div>
+      <div class="stats-value">{{ stats.linked }}</div>
+    </div>
+  </div>
+
+  <div class="unlink-row">
+    <a class="btn btn-danger" ng-click="unlinkInbox()">Unlink inbox</a>
+  </div>
+
+  <form name="signForm" ng-submit="saveSign()" novalidate>
+    <div class="form sign-form">
+      <div class="field-row form-title">
+        Signature
+      </div>
+
+      <div class="field-row signature-row">
+        <wysiwyg-edit content="sign"></wysiwyg-edit>
+      </div>
+
+      <div class="field-row">
+        <button class="btn btn-large">Save changes</button>
+      </div>
+    </div>
+  </form>
+</div>

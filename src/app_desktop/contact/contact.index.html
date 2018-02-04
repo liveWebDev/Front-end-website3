@@ -1,0 +1,52 @@
+<div class="header">
+  <h1>
+    <a class="company-title" ui-sref="main.one_column.deal_index">
+      {{ company.title}}
+      <i class="s s-arrow_right"></i>
+    </a>
+    Contacts</h1>
+</div>
+<div class="inbox-list-block contact-list-block" perfect-scrollbar="">
+  <div class="block-inner">
+    <div class="new-letter">
+      <a item="nullContact" callback="createCallback" contact-updater class="btn">Add new contact</a>
+    </div>
+
+    <div class="search-block search-contact-block">
+      <input type="text" class="search-input" placeholder="Search contacts" ng-model="searchText">
+      <button class="search-button"><i class="fa fa-search"></i></button>
+    </div>
+  </div>
+
+  <div class="deals-loader" ng-hide="isDataLoaded">
+    <div class="loader-inner">
+      <i class="fa fa-cog fa-3x fa-spin"></i>
+      <br/>loading...
+    </div>
+  </div>
+
+  <div class="partner-list" ng-show="isDataLoaded">
+    <div class="partner-item" ng-repeat="(contactChar,contacts) in contactList" ng-show="(contacts | filter:searchText).length">
+      <div class="partner-char">{{ contactChar }}</div>
+
+      <div class="contact-full-list">
+        <div class="simple-item contact-item" ng-repeat="contact in contacts | filter:searchText" ng-class="{active: current.id == contact.id}" ng-click="viewContact(contact)">
+          <div class="contact-content">
+            <div class="contact-title">
+              {{ contact.name }}
+            </div>
+            <div class="contact-partner">
+              {{ partners[contact.partnerId].name }}
+            </div>
+          </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="inbox-more-block" custom-scroll>
+  <div id="contact-right-content" ui-view></div>
+</div>

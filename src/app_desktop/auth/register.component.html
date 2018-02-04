@@ -1,0 +1,96 @@
+<div class="no-auth-wrapper">
+    <div class="wrapper-with-image" perfect-scrollbar>
+        <div class="content-wrapper">
+            <landing-dudes></landing-dudes>
+            <div class="content-block block block-wide" id="content-block">
+                <div class="landing-text">
+                    <div class="no-auth-logo"><i class="s s-logo"></i></div>
+                    {{ common.title }}
+                </div>
+                <div class="landing">
+                    <div class="form">
+                        <div *ngIf="step == 1">
+                            <form name="firstStepForm" (ngSubmit)="firstStep.form.valid && submitFirstStep($event, email.value, password.value, confirm.value); submitAttempt = true; " #firstStep="ngForm" novalidate>
+                                <div class="field-row">
+                                    <input type="email" placeholder="Please, enter your email" class="form-control" name="email" [(ngModel)]="firstStep.email" #email="ngModel"  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$" required validate-onblur (keyup)="onKey()" />
+                                    <div *ngIf="!email.valid && (email.dirty || email.touched) || (email.untouched && submitAttempt)">
+                                        <div [hidden]="!email.errors.required" class="form-help-error slide-down-help">
+                                            Email is required
+                                        </div>
+                                        <div [hidden]="!email.errors.pattern" class="form-help-error slide-down-help">
+                                            Email is invalid
+                                        </div>
+                                    </div>
+                                    <div *ngIf="errorMsg">
+                                        <div class="form-help-error slide-down-help">{{ errorMsg }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row">
+                                    <input type="password" placeholder="Your password" name="password" [(ngModel)]="firstStep.password" #password="ngModel" minlength="6" required validateEqual="confirm" reverse="true" />
+                                    <div *ngIf="password.errors && password.touched">
+                                        <div [hidden]="!password.errors.required" class="form-help-error slide-down-help">
+                                            Password is required
+                                        </div>
+                                        <div [hidden]="!password.errors.minlength" class="form-help-error slide-down-help">
+                                            Password is too short (minimum is 6 character)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row">
+                                    <input type="password" placeholder="Confirm your password" [(ngModel)]="firstStep.confirm" name="confirm" #confirm="ngModel" required validateEqual="password" reverse="false">
+                                    <div *ngIf="confirm.errors && confirm.touched">
+                                        <div [hidden]="!confirm.errors.required" class="form-help-error slide-down-help">
+                                            Confirmed password cannot be blank
+                                        </div>
+                                        <div [hidden]="!confirm.errors.validateEqual" class="form-help-error slide-down-help">
+                                            Password and confirmation must be same
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row">
+                                    <button type="submit" class="btn btn-block landing-btn" >Next step</button>
+                                    <div class="under-button-links">
+                                        <a [routerLink]="['/login']" class="forgot-password">I already have account</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div *ngIf="step == 2">
+                            <form name="secondStepForm" (ngSubmit)="secondStep.form.valid && submitSecondStep($event, username.value, companyName.value);" #secondStep="ngForm" novalidate>
+                                <div class="field-row">
+                                    <input type="text" placeholder="Enter your full name" [(ngModel)]="secondStep.username" name="username" required #username="ngModel">
+                                    <div *ngIf="username.errors && username.touched">
+                                        <div [hidden]="!username.errors.required" class="form-help-error slide-down-help">
+                                            Name is required field
+                                        </div>
+                                    </div>
+                                    <div *ngIf="errorMsg2">
+                                        <div class="form-help-error slide-down-help">{{ errorMsg2 }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row">
+                                    <input type="text" placeholder="Company name" [(ngModel)]="secondStep.companyName" name="companyName" #companyName="ngModel">
+                                </div>
+                                <button type="submit" style="display:none">hidden submit</button>
+                            </form>
+                            <div class="field-row sign-up-field">
+                                <button class="btn btn-block landing-btn" (click)="secondStep.form.valid && submitSecondStep($event, username.value, companyName.value);">{{ loading ? '' : 'Sign up' }}<i *ngIf="loading" class="fa fa-cog fa-spin"></i></button>
+                                <div class="under-button-links">
+                                    <a [routerLink]="['/login']" class="forgot-password">I already have account</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

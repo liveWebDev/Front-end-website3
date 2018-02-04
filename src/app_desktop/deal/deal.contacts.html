@@ -1,0 +1,33 @@
+
+<div class="contact-list">
+  <div class="contact-item" ng-repeat="contact in contacts">
+    <div class="right">
+      <a class="chevron"><i class="fa fa-chevron-down" id="expanded_icon_{{contact.id}}"></i></a>
+    </div>
+
+    <div class="contact-title" ng-click="expandContact(contact)">
+      <i class="s s-user icon"></i>
+      {{ contact.name }}
+
+      <a class="update" item="contact" contact-updater><i class="s s-edit"></i></a>
+    </div>
+
+
+      <div class="contact-position" ng-if="contact.position">
+        {{ contact.position }}
+      </div>
+    <div id="contact_expanded_{{contact.id}}" style="display:none;">
+      <div class="contact-fields">
+        <div class="contact-field" ng-repeat="(field, fieldName) in contactFields" ng-class="field" ng-if="field != 'position' && contact.fields[field][0].value">
+          <div class="contact-field-name">
+            <span class="icon fa"></span>
+          </div>
+          <div class="contact-field-value">
+            <p ng-repeat="contactValue in contact.fields[field]">{{ contactValue.value }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<a class="btn btn-block" ng-if="deal" item="nullContact" callback="createCallback" partner-id="deal.partner_id" contact-updater>Add contact</a>

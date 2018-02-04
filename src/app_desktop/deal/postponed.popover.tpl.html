@@ -1,0 +1,7 @@
+<div style="width:230px;" class="popover postpone-popover">
+  <div class="arrow"></div>
+  <div class="popover-content">
+    <bs-datepicker ng-model="newStatus.postponeDate" data-bs-show="true" data-min-date="{{tomorrow}}" data-date-format="dd.MM.yyyy"></bs-datepicker>
+    <a ng-click="changeStatus(2)" class="btn btn-block" ng-class="{'disabled' : !newStatus.postponeDate}"><i class="fa fa-clock-o"></i> Postpone it!</a>
+  </div>
+</div>

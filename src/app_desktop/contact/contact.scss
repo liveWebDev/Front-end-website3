@@ -1,0 +1,187 @@
+@import "../styles/_variables";
+@import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables";
+@import "../styles/_mixins";
+@import "../styles/_buttons";
+@import "../deal/deal";
+@import "../deal/deal.contacts";
+
+.partner-list {
+  .partner-char {
+    color:$color-red;
+    font-weight:500;
+    padding:5px 0 5px 20px;
+    font-size:15px;
+  }
+
+  .contact-full-list {
+    .contact-item {
+      font-size:14px;
+      cursor: pointer;
+      padding:10px 5px 10px 20px;
+      border-bottom:1px solid #dbe3e8;
+      border-top:1px solid #d4e0e8;
+
+      &:first-child {
+        border-top:0;
+      }
+
+      &:last-child {
+        border-bottom:0;
+      }
+
+      &:hover {
+        background: #DAE8F2;
+      }
+
+      &.active {
+        background:$color-blue;
+        color:#fff;
+        border-color: #72b9ee;
+
+        .contact-partner,
+        .contact-title {
+          color:#fff;
+        }
+      }
+
+      .contact-title {
+        margin-bottom:0;
+        font-weight:400;
+        color:#575D70;
+      }
+
+      .contact-partner{
+        color:$color-red;
+        font-weight:300;
+        font-size:13px;
+      }
+    }
+  }
+}
+
+.contact-list.contact-view {
+  background:none;
+  box-shadow: none;
+  border:0;
+
+  .contact-title {
+    font-size:17px;
+
+    span {
+      color:$font-color-dark-grey;
+    }
+
+    .update-link {
+      color:$font-color-dark-grey;
+      margin-left:5px;
+      .s {
+        margin-top: -10px;
+      }
+    }
+  }
+
+  .contact-item {
+    border:0;
+    box-shadow: none;
+    padding:0;
+
+    .contact-position {
+      margin-left:0;
+      color:#2F3041;
+      margin-top:5px;
+
+      .sep {
+        color:#7A8095;
+      }
+
+      .partner {
+        color:#FDB79E;
+        font-weight:400;
+      }
+    }
+
+
+    .contact-head-title {
+      font-size:19px;
+      color:#49516A;
+      margin:17px 0 12px;
+      font-weight:300;
+    }
+
+    .contact-field {
+      margin-bottom:7px;
+      .contact-field-name {
+        color:#575D70;
+
+        .fa {
+          font-size:14px;
+        }
+      }
+
+      .contact-field-value {
+        margin-left:100px;
+      }
+    }
+  }
+}
+
+.contact-form {
+  .field-row {
+    min-height:33px;
+    position: relative;
+
+    &>.fa {
+      line-height:26px;
+      vertical-align: top;
+      float:left;
+    }
+
+    .field-item-place {
+      margin-left:30px;
+      position:relative;
+
+      .field-plus {
+        position: absolute;
+        top: 2px;
+        right: 0;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .contact-title {
+    color:$font-color-dark-grey;
+    text-transform: uppercase;
+    font-size:18px;
+    margin-bottom:20px;
+
+    .slim-error {
+      text-transform: none;
+    }
+  }
+
+  .required-mark {
+    position: absolute;
+    top: 0.5em;
+    right: 0.65em;
+    color: #7A8095;
+    opacity: .75;
+  }
+}
+
+.contact-deal-title {
+  font-size:17px;
+  font-weight:400;
+  margin:0 0 10px 30px;
+}
+
+.search-contact-block {
+  margin-right:150px;
+  margin-top:2px;
+}
+
+.inbox-list-block.contact-list-block {
+  .block-inner {
+    padding:15px 20px;
+  }
+}

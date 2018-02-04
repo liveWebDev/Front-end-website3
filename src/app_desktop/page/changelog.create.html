@@ -1,0 +1,28 @@
+<div class="block block-clear">
+  <div class="block-inner">
+    <form name="changelogForm" ng-submit="submit()" novalidate>
+      <div class="form">
+        <h1>Add entry to changelog</h1>
+        <div class="field-row">
+          <input type="text" placeholder="Title" ng-model="item.title" name="title" required>
+
+          <div ng-messages="changelogForm.title.$error" ng-if="changelogForm.title.$touched || changelogForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Title is required field</div>
+          </div>
+        </div>
+
+        <div class="field-row" style="border:1px solid #eaeaea;">
+          <wysiwyg-edit content="item.body"></wysiwyg-edit>
+
+          <div ng-messages="changelogForm.body.$error" ng-if="changelogForm.body.$touched || changelogForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">It is required field</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <button class="btn btn-large" load-button item="button" ng-if="button">Add entry</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

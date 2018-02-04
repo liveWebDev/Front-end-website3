@@ -1,0 +1,23 @@
+<div style="width:180px;" class="popover">
+  <div class="arrow"></div>
+  <ul class="popover-menu">
+    <li ng-if="companyUser.role == 2">
+      <a class="popover-item" ng-click="changeRole(3)">
+        <i class="fa fa-level-down fa-fw"></i>
+        Rollback to user
+      </a>
+    </li>
+    <li ng-if="companyUser.role == 3">
+      <a class="popover-item" ng-click="changeRole(2)">
+        <i class="fa fa-level-up fa-fw"></i>
+        Raise to moderator
+      </a>
+    </li>
+    <li>
+      <a class="popover-item" ng-click="kickAss(companyUser)">
+        <i class="fa fa-sign-out fa-fw"></i>
+        Kick ass
+      </a>
+    </li>
+  </ul>
+</div>

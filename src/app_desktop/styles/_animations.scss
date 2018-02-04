@@ -1,0 +1,201 @@
+/* ------------------------------------------- */
+/* Mixins
+/* ------------------------------------------- */
+
+@mixin transitionDuration ($duration) {
+  -webkit-transition-duration: $duration;
+  transition-duration: $duration;
+}
+
+@mixin easingTimingFunction () {
+  -webkit-transition: all 0s cubic-bezier(.250, .460, .450, .940);
+  -moz-transition: all 0s cubic-bezier(.250, .460, .450, .940);
+  -ms-transition: all 0s cubic-bezier(.250, .460, .450, .940);
+  -o-transition: all 0s cubic-bezier(.250, .460, .450, .940);
+  transition: all 0s cubic-bezier(.250, .460, .450, .940); /* easeOutQuad */
+  -webkit-transition-timing-function: cubic-bezier(.250, .460, .450, .940);
+  -moz-transition-timing-function: cubic-bezier(.250, .460, .450, .940);
+  -ms-transition-timing-function: cubic-bezier(.250, .460, .450, .940);
+  -o-transition-timing-function: cubic-bezier(.250, .460, .450, .940);
+  transition-timing-function: cubic-bezier(.250, .460, .450, .940); /* easeOutQuad */
+}
+
+@mixin transform ($value) {
+  -webkit-transform: $value;
+  -ms-transform: $value;
+  transform: $value;
+}
+
+/* ------------------------------------------- */
+/* Slide Down
+/* ------------------------------------------- */
+
+.slide-down-help {
+  @include easingTimingFunction();
+  &.ng-enter {
+    @include transform(translateY(-10px));
+    @include transitionDuration(250ms);
+
+    height: 0;
+    opacity: 0;
+  }
+  &.ng-enter-active {
+    @include transform(translateY(0));
+
+
+    height: 13px;
+    opacity: 1;
+  }
+  &.ng-leave {
+    @include transform(translateY(0));
+    @include transitionDuration(250ms);
+
+    height: 13px;
+    opacity: 1;
+  }
+  &.ng-leave-active {
+    @include transform(translateY(-10px));
+
+    height: 0;
+    opacity: 0;
+  }
+  // Hide
+  &.ng-hide-add {
+    @include transform(translateY(0));
+    @include transitionDuration(250ms);
+
+    overflow: hidden;
+    height: 13px;
+    opacity:1;
+  }
+  &.ng-hide-add.ng-hide-add-active {
+    @include transform(translateY(-10px));
+
+    height: 0;
+    opacity:0;
+  }
+  // Show
+  &.ng-hide-remove {
+    @include transform(translateY(-20px));
+    @include transitionDuration(250ms);
+
+    display:block!important;
+    height: 13px;
+    opacity:0;
+  }
+  &.ng-hide-remove.ng-hide-remove-active {
+    @include transform(translateY(0));
+
+    height: 0;
+    opacity:1;
+  }
+}
+.slide-down-form {
+  @include easingTimingFunction();
+  &.ng-enter {
+    @include transform(translateY(-10px));
+    @include transitionDuration(250ms);
+
+    height: 0;
+    opacity: 0;
+    padding: 0;
+  }
+  &.ng-enter-active {
+    @include transform(translateY(0));
+
+
+    height: 65px;
+    opacity: 1;
+  }
+  &.ng-leave {
+    @include transform(translateY(0));
+    @include transitionDuration(250ms);
+
+    height: 65px;
+    opacity: 1;
+  }
+  &.ng-leave-active {
+    @include transform(translateY(-10px));
+
+    height: 0;
+    padding: 0;
+    opacity: 0;
+  }
+  // Hide
+  &.ng-hide-add {
+    @include transform(translateY(0));
+    @include transitionDuration(250ms);
+
+    overflow: hidden;
+    height: 65px;
+    opacity:1;
+  }
+  &.ng-hide-add.ng-hide-add-active {
+    @include transform(translateY(-10px));
+
+    height: 0;
+    opacity:0;
+    padding: 0;
+  }
+  // Show
+  &.ng-hide-remove {
+    @include transform(translateY(-20px));
+    @include transitionDuration(250ms);
+
+    display:block!important;
+    height: 65px;
+    opacity:0;
+  }
+  &.ng-hide-remove.ng-hide-remove-active {
+    @include transform(translateY(0));
+
+    height: 0;
+    opacity:1;
+    padding: 0;
+  }
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+.loader {
+  margin-left: 5px;
+  float: right;
+  width: 10px;
+  height: 10px;
+  font-size: 9px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid #ffffff;
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

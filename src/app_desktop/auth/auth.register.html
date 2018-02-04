@@ -1,0 +1,65 @@
+ <div class="form">
+    <div ng-if="step == 1">
+      <form name="firstStepForm" id="form-step1" ng-submit="submitFirstStep(firstStepForm)" novalidate>
+        <div class="field-row">
+          <input type="email" placeholder="Please, enter your email" ng-model="register.email" name="email" required check-email>
+
+          <div ng-messages="firstStepForm.email.$error" ng-if="firstStepForm.email.$touched || firstStepForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Email is required field</div>
+            <div ng-message="email" class="form-help-error slide-down-help">Email is invalid</div>
+            <div ng-message="checkEmail" class="form-help-error slide-down-help">Email is already registered in system</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <input type="password" placeholder="Your password" ng-model="register.password" name="password" required minlength="5">
+
+          <div ng-messages="firstStepForm.password.$error" ng-if="firstStepForm.password.$touched || firstStepForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Password is required field</div>
+            <div ng-message="minlength" class="form-help-error slide-down-help">Password is too short (minimum is 5 character)</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <input type="password" placeholder="Confirm your password" ng-model="register.confirm" name="confirm" required equals="{{ register.password }}">
+
+          <div ng-messages="firstStepForm.confirm.$error" ng-if="firstStepForm.confirm.$touched || firstStepForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Confirmed password cannot be blank</div>
+            <div ng-message="equals" class="form-help-error slide-down-help">Password and confirmation must be same</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <button class="btn btn-block landing-btn">Next step</button>
+          <div class="under-button-links">
+            <a ui-sref="noAuth.login" class="forgot-password">I already have account</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-show="step == 2">
+      <form name="secondStepForm" id="form-step2" novalidate>
+        <div class="field-row">
+          <input type="text" placeholder="Enter your full name" ng-model="register.username" name="fullname" required>
+
+          <div ng-messages="secondStepForm.fullname.$error" ng-if="secondStepForm.fullname.$touched || secondStepForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Name is required field</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <input type="text" placeholder="Company name" ng-model="company.title" name="company">
+        </div>
+      </form>
+
+      <div class="field-row sign-up-field">
+        <button class="btn btn-block landing-btn" item="finalButton" load-button ng-if="finalButton">Sign up</button>
+        <div class="under-button-links">
+          <a ui-sref="noAuth.login" class="forgot-password">I already have account</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+

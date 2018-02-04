@@ -1,0 +1,20 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" ng-show="title">
+        <h4 class="modal-title" ng-bind="title"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="email-sure-text">
+          This email will not be saved.
+          Are you really want to leave this page?
+        </div>
+
+        <div class="email-sure-btns">
+          <a ng-click="leave()" class="btn">Yes</a>
+          <a ng-click="keep()" class="btn btn-danger">No</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,212 @@
+
+<div class="header">
+    <h1>
+        <a class="company-title" (click)="backToDeals()">
+            {{currentCompany?.title | slice:0:30}}
+            <i class="s s-arrow_right"></i>
+        </a>
+        info
+    </h1>
+</div>
+
+<div class="left-wide-block company-user-block">
+    <div class="block-inner">
+        <div class="new-letter" style="float: right; margin-top: -2px;">
+            <div><a (click)="inviteModalWindow.show()" class="btn" style="display: inline-block; background: #10d4c6; color: #fff; border: 1px solid #1fbab5; padding: 0 15px; cursor: pointer; height: 33px; line-height: 33px; border-radius: 3px;">Send invite</a></div>
+        </div>
+
+        <div class="search-block search-company-user-block" style="margin: 2px 130px 0 0; position: relative;">
+            <input type="text" class="search-input" placeholder="Search user by name" #searchBox (keyup)="filterUsers(searchBox.value)" style="border: 1px solid #cfd8de; background: #fff; height: 30px; padding: 0 15px; border-radius: 16px;">
+            <button class="search-button" style="position: absolute; right: 7px; top: 2px; background: 0 0; border: 0; color: #b0b3c0;" (click)="filterUsers(searchBox.value)"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="deals-loader" [hidden]="!isDataLoaded">
+        <div class="loader-inner">
+            <i class="fa fa-cog fa-3x fa-spin"></i>
+            <br/>loading...
+        </div>
+    </div>
+
+    <table cellpadding="0" cellspacing="0" class="sidebar-table company-user-table" [hidden]="isDataLoaded">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td width="90">Status</td>
+            <td width="20"></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let companyUser of (filteredUsers | CompanyUsersPipe: searchText)">
+            <td>
+                <b>{{ companyUser?.username }}</b>
+                <span class="user-you" *ngIf="companyUser?.id == currentUserId">(you)</span>
+            </td>
+
+            <td>
+                {{ roles[companyUser?.role - 1] }}
+            </td>
+
+            <td>
+                <a class="hidden-el options-link" *ngIf="companyUser?.role > 1 && userRole < 3" [popover]="changeRolePopover"><i class="fa fa-cog"></i></a>
+                <popover-content #changeRolePopover placement="bottom" [closeOnClickOutside]="true">
+                    <div class="arrow"></div>
+                    <ul class="popover-menu">
+                        <li *ngIf="companyUser.role == 2" style="min-width: 140px;">
+                            <a class="popover-item" (click)="changeRole(3, companyUser.id, $event)">
+                                <i class="fa fa-level-down fa-fw"></i>
+                                Rollback to sales
+                            </a>
+                        </li>
+                        <li *ngIf="companyUser.role == 3" style="min-width: 140px;">
+                            <a class="popover-item" (click)="changeRole(2, companyUser.id, $event)">
+                                <i class="fa fa-level-up fa-fw"></i>
+                                Raise to manager
+                            </a>
+                        </li>
+                        <li *ngIf="companyUser.id !== currentUserId">
+                            <a class="popover-item" (click)="kickAss(companyUser, $event)">
+                                <i class="fa fa-sign-out fa-fw"></i>
+                                Kick ass
+                            </a>
+                        </li>
+                    </ul>
+                </popover-content>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="right-short-block company-info-block">
+    <div class="block-inner">
+        <div class="right-links" style="position: absolute; right: 30px; top: 27px;">
+            <a *ngIf="userRole == 1" title="Delete company" (click)="removingWarning.show()" style="font-size: 15px; color: #AFC5D7;"><i class="fa fa-trash"></i></a>
+            <a *ngIf="userRole !== 1" title="Leave company" (click)="removingWarning.show()" style="font-size: 15px; color: #AFC5D7;"><i  class="fa fa-sign-out" aria-hidden="true"></i></a>
+        </div>
+        <h1 style="max-width: calc(100% - 65px);"> {{ currentCompany?.title }} <a class="update-link" *ngIf="userRole == 1" (click)="companyInfoModalWindow.show()"><i class="fa fa-pencil-square-o"></i></a></h1>
+
+        <div class="subtitle">Description</div>
+
+        {{ currentCompany?.description }}
+    </div>
+
+</div>
+
+<div class="modal fade feasy-modal" bsModal #companyInfoModalWindow="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 480px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="companyInfoModalWindow.hide(); companyInfoErrors = [];"><span aria-hidden="true">×</span> <span class="close-title">Close</span></button>
+                <h1>Edit company info</h1>
+            </div>
+            <div class="modal-body">
+                <form name="companyForm" class="form contact-form" (submit)="updateCompanyInfo()" novalidate>
+                    <div class="field-row">
+                        <input type="text" class="slim" placeholder="Please put the company name here" name="title" [(ngModel)]="companyInfoModal.title" required #title="ngModel" (focus)="companyInfoErrors = [];">
+
+                        <div>
+                            <div [hidden]="!companyInfoErrors?.title" class="form-help-error slide-down-help">{{companyInfoErrors?.title}}</div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <textarea class="slim" style="height:100px;" placeholder="Describe your company in a few words, thanks" name="description" [(ngModel)]="companyInfoModal.description"></textarea>
+                    </div>
+
+                    <div class="field-row">
+                        <button class="btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade feasy-modal user-invite-modal" bsModal #inviteModalWindow="bs-modal" [config]="{backdrop: 'static'}" (onHide)="sendInvite.form.reset(); emailError.hide()"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog" style="width:370px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+
+                <button type="button" class="close" aria-label="Close" (click)="inviteModalWindow.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                <h1>Invite user</h1>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom:20px;">
+                    Search for a new company member by email or draft someone who is not on Feasy
+                </div>
+
+
+                <form name="form.inviteForm" class="form" (ngSubmit)="inviteUser($event, email.value)" #sendInvite="ngForm" id="invite-form" novalidate>
+                    <button class="btn right-button" type="submit" style="min-width: 65px;">{{ inviting ? '' : 'Invite' }}<i *ngIf="inviting" class="fa fa-cog fa-spin"></i></button>
+                    <input type="email" class="slim" placeholder="Write email" name="invite_email" #inviteInput="ngModel" #email [(ngModel)]="inviteEmail" style="width:250px;"
+                           tooltip="This email is currently present in company"
+                           (keydown)="emailError.hide()"
+                           triggers=""
+                           #emailError="bs-tooltip"
+                           placement="bottom" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$"
+                           required>
+                    <div *ngIf="inviteInput.errors && inviteSubmitAttempt">
+                        <div [hidden]="!inviteInput.errors.required" class="form-help-error slide-down-help">
+                          Email is required
+                        </div>
+                    </div>
+                    <div *ngIf="inviteInput.errors && inviteInput.dirty">
+                      <div [hidden]="!inviteInput.errors.pattern" class="form-help-error slide-down-help">
+                        Email is invalid
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade feasy-modal" bsModal #removingWarning="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog" style="width:370px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+
+                <button type="button" class="close" aria-label="Close" (click)="removingWarning.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                <h1>{{ userRole==1 ? 'Delete company' : 'Leave company' }}</h1>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom:20px;">
+                    Are you sure?
+                </div>
+
+                <div style="text-align: center;">
+                    <a class="btn" style="display: inline-block; background: #10d4c6; color: #fff; border: 1px solid #1fbab5; padding: 0 15px; cursor: pointer; height: 33px; line-height: 33px; border-radius: 3px;" (click)="removeCompany()">{{ userRole==1 ? 'Yes, remove this company!' : 'Yes, leave this company!' }}</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade feasy-modal" bsModal #dealsReassignModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog" style="width:580px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="dealsReassignModal.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                <h1 class="deal-link-title">Reassign user's deals</h1>
+            </div>
+            <div class="modal-body link-deal-container">
+                <p>Choose a user to which you want to reassign all deals</p>
+                <ul class="user-list" style="margin-top: 20px;">
+                    <li *ngFor="let user of usersToReassign" style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                        <span style="width: 60%;">{{user.username}}</span>
+                        <span style="width: 20%;">{{ roles[user?.role - 1]}}</span>
+                        <span class="btn btn-success" (click)="reassign(user.id)"><i class="fa fa-check"></i></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

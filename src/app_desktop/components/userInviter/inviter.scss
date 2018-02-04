@@ -1,0 +1,14 @@
+.invite-filter-link {
+  padding-left:10px;
+  border-left:1px solid $input-border-color;
+  color:$font-color;
+  height:30px;
+  line-height:30px;
+  vertical-align: top;
+
+  .s {
+    height: 15px;
+    font-size: 15px;
+    vertical-align: top;
+  }
+}

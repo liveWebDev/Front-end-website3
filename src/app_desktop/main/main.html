@@ -1,0 +1,166 @@
+<div ng-controller="SidebarCtrl">
+  <div class="sidebar">
+    <div class="sidebar-inner" perfect-scrollbar>
+      <!--<div class="header-logo">
+        Fcuking Easy CRM
+      </div>-->
+
+      <div class="sidebar-search-block">
+          <input class="sidebar-search" placeholder="Search on feasy" ng-model="searchItem.query" ng-focus="searchFocus()" ng-keyup="globalSearch()">
+          <span class="search-button"><i class="fa fa-search"></i></span>
+      </div>
+
+      <!--
+      <ul class="sidebar-list">
+        <li class="sidebar-section user-section with-line">
+          <a
+            data-template="app_desktop/layout/userMenu.popover.html"
+            data-placement="bottom-left"
+            data-trigger="click"
+            data-auto-close="true"
+            bs-popover
+            >
+          <i class="fa fa-user"></i>
+          {{ user.username }}
+          <i class="fa fa-caret-down"></i>
+          </a>
+        </li>
+      </ul>
+  -->
+
+      <div class="user-head">
+        <a ui-sref="main.one_column.user_profile({id: user.id})" class="user-photo"><img src="{{ user.avatarName }}"></a>
+      </div>
+
+
+      <ul class="sidebar-list">
+        <li class="sidebar-section">
+          Companies
+
+          <a class="counter" ng-if="invites.length" ng-click="openInviteList()">
+            {{ invites.counter_title }}
+          </a>
+        </li>
+
+        <li ng-repeat="company in user.companies | filter: filterActiveCompanies">
+          <div class="hot" ng-if="company.hot">
+            <span>{{ company.hot }}</span>
+          </div>
+          <a href="#" class="sidebar-item company" ng-class="{active: activeCompanyClass(company.firm_id)}" ng-click="switchCompany(company.firm_id)">
+            <span class="sidebar-item-label">{{ company.title | cut:true:15 }}</span>
+          </a>
+        </li>
+
+        <li class="with-padding with-line">
+          <a ui-sref="main.one_column.company_create" class="sidebar-item add-company-link">
+            <i class="s s-inline s-plus_circle"></i>
+            <span>
+              Add new
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="sidebar-list">
+        <li class="sidebar-section" ng-show="user.companies.length > 0">
+          Inboxes
+        </li>
+
+        <li ng-repeat="email in emails">
+          <a ng-click="switchInbox(email)" class="sidebar-item company"  ng-class="activeEmailClass(email)">
+            <span class="sidebar-item-label">
+            {{ email | cut:true:15 }}
+            </span>
+          </a>
+        </li>
+
+        <li class="with-padding with-line">
+          <a ui-sref="google_auth" class="sidebar-item add-company-link">
+            <i class="s s-inline s-plus_circle"></i>
+            <span>
+              Link new mailbox
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="sidebar-list">
+        <li>
+          <a ng-click="switchPage('main.one_column.about')" class="sidebar-item company page" ng-class="{active: activePageClass('main.one_column.about')}">
+            <span class="sidebar-item-label">
+              <i class="s s-fuck"></i>
+            About
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="foot-logo">
+      Fcuking Easy CRM
+    </div>
+  </div>
+
+  <div class="global-search-block am-slide-left" ng-show="navState.isSearch">
+    <div class="header">
+      <button type="button" class="close" aria-label="Close" ng-click="hideSearch()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+
+      <h1 ng-show="isSearchHistory">Search history</h1>
+      <h1 ng-show="!isSearchHistory">Search results <span ng-if="searchCount">{{searchCount}}</span></h1>
+    </div>
+
+    <div class="search-loader" ng-show="searchProgress">
+      <div class="loader-inner">
+        <i class="fa fa-cog fa-spin"></i> loading...
+      </div>
+    </div>
+
+    <div class="search-loader" ng-show="nothing && !searchProgress">
+      <div class="loader-inner">
+        Did not find anything, try to change search query
+      </div>
+    </div>
+
+    <div class="search-results"  ng-show="!searchProgress && !nothing" perfect-scrollbar>
+      <div class="search-results-inner history" ng-if="isSearchHistory">
+        <div class="search-history-list">
+          <div class="history-item" ng-repeat="historyItem in searchItem.history track by $index" ng-click="restoreSearch(historyItem)">
+            {{ historyItem }}
+          </div>
+        </div>
+
+        <div class="search-loader" ng-show="!searchItem.history.length">
+          <div class="loader-inner">
+            You have not search history yet
+          </div>
+        </div>
+      </div>
+
+      <div class="search-results-inner" ng-if="!isSearchHistory">
+
+        <div class="search-section"  ng-repeat="(tabCode, tabName) in searchTabs" ng-if="searchResults.counters[tabCode] > 0">
+          <div class="search-section-title">
+            {{ tabName }}
+          </div>
+
+          <div class="search-list">
+            <div class="search-item" ng-repeat="searchItem in searchResults[tabCode]" ng-click="showSearchResult(searchItem, tabCode)">
+              <div class="search-item-title">
+                <span ng-if="tabCode == 'deals'">{{ searchItem.partner_name + ' | ' + searchItem.title | cut:true:200 }}</span>
+                <span ng-if="tabCode == 'contacts'">{{ searchItem.contact_name | cut:true:200 }}</span>
+                <span ng-if="tabCode == 'letters'">{{ searchItem.subject | cut:true:150 }}</span>
+              </div>
+
+              <div class="search-item-author" ng-if="tabCode == 'letters'">
+                {{ searchItem.snippet }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div ui-view></div>
+

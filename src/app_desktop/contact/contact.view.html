@@ -1,0 +1,36 @@
+<div class="inbox-right-content">
+  <div class="contact-list contact-view">
+    <div class="contact-item">
+      <div class="contact-title">
+        {{ contact.name }}
+
+        <a href="#" class="update-link" item="contact" callback="updateCallback" contact-updater ng-if="contact"><i class="s s-edit"></i></a>
+      </div>
+      <div class="contact-position">
+        {{ contact.position || 'Works' }} <span class="sep">at</span> <span class="partner">{{ contact.partner_name }}</span>
+      </div>
+
+      <div class="contact-head-title">
+        Contacts
+      </div>
+
+      <div class="contact-field" ng-repeat="(field,fieldName) in contactFields" ng-class="field" ng-if="field != 'position' && contact.fields[field][0].value">
+        <div class="contact-field-name">
+          <span class="icon fa"></span>
+          {{ fieldName }}
+        </div>
+        <div class="contact-field-value">
+          <p ng-repeat="contactValue in contact.fields[field]">
+            <a href="{{ field == 'email' ? 'mailto:' : field == 'skype' || field == 'phone' ? 'skype:' : ''}}{{ contact[field] }}{{ field == 'skype' ? '?chat' : ''}}">{{ contactValue.value }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="contact-deal-title">
+  Partner's all deals
+</div>
+
+<ng-include src="'app_desktop/deal/deal.list.html'"></ng-include>

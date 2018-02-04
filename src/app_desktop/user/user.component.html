@@ -1,0 +1,116 @@
+<div class="header">
+    <a (click)="goBack()" class="back-link"><i class="s s-back"></i></a>
+    <div class="right-links">
+        <a routerLink="/logout"><i class="s s-inline s-login"></i> Log out</a>
+    </div>
+    <h1 (click)="goBack()" class="clickable">
+        {{ user?.username }}
+    </h1>
+</div>
+<div class="block-inner user-profile clearfix">
+    <div class="user-photo">
+        <div class="user-photo-container">
+            <div class="avatar-loader" [hidden]="!isUploadingInProcess">
+                <div class="loader-gear">
+                    <i class="fa fa-cog fa-spin"></i>
+                </div>
+            </div>
+            <img src="{{ loadedUserAvatar }}">
+        </div>
+        <div *ngIf="!!avatarErrorMessage" class="form-help-error slide-down-help" style="color: red">
+          {{ avatarErrorMessage }}
+        </div>
+        <ul class="avatar-options" [hidden]="!isMe">
+            <li>
+                <label class="upload-avatar-label" (click)="avatarInput.value = ''">
+                    <span>Change photo</span>
+                    <input type="file" #avatarInput (change)="updateAvatar($event)">
+                </label>
+            </li>
+            <!--<li><a>Delete photo</a></li>-->
+        </ul>
+    </div>
+
+    <div class="user-info-block">
+        <div class="user-name">
+            {{ user?.username }}
+            <a routerLink="/main/user/0/edit" class="update-link" [hidden]="!isMe"><i class="s s-inline s-edit"></i></a>
+        </div>
+
+        <div class="contact-list profile-view">
+            <div class="contact-item">
+                <div class="contact-head-title">
+                    Contacts
+                </div>
+
+                <div class="contact-field field" style="font-weight: 300; font-size: 12px; color: #575d70;">
+                    <div class="contact-field-name" style="float: left;" [hidden]="!user?.email">
+                        <span class="icon fa"></span>
+                        Email
+                    </div>
+                    <div class="contact-field-value" >
+                        {{ user?.email }}
+                    </div>
+                    <div class="contact-field-name" style="float: left;" [hidden]="!user?.phone">
+                        <span class="icon fa"></span>
+                        Phone
+                    </div>
+                    <div class="contact-field-value" >
+                        {{ user?.phone }}
+                    </div>
+                    <div class="contact-field-name" style="float: left;" [hidden]="!user?.skype">
+                        <span class="icon fa"></span>
+                        Skype
+                    </div>
+                    <div class="contact-field-value" >
+                        {{ user?.skype }}
+                    </div>
+                    <div class="contact-field-name" style="float: left;" [hidden]="!user?.facebook">
+                        <span class="icon fa"></span>
+                        Facebook
+                    </div>
+                    <div class="contact-field-value" >
+                        {{ user?.facebook }}
+                    </div>
+                    <div class="contact-field-name" style="float: left;" [hidden]="!user?.linkedin">
+                        <span class="icon fa"></span>
+                        Linkedin
+                    </div>
+                    <div class="contact-field-value" >
+                        {{ user?.linkedin }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<perfect-scrollbar class="block-inner" [config]="config">
+    <div class="section-title">Activity log</div>
+    <div class="activity-list">
+        <div class="activity-item" *ngFor="let item of activity">
+            <div class="activity-item-date">
+                {{item.created_at}}
+            </div>
+
+            <div class="activity-item-title">
+        <span class="system-descr" ng-if="item.post_type == 0" ng-switch on="item.systemMessage.action">
+          <span ng-switch-when="update"> Updated deal </span>
+          <span ng-switch-when="init"> Created new deal </span>
+          <span ng-switch-when="postpone"> Postponed deal </span>
+          <span ng-switch-when="close"> Closed deal </span>
+          <span ng-switch-when="reassign"> Reassigned deal </span>
+          <span ng-switch-when="restore"> Restored deal </span>
+          <span ng-switch-when="link"> Linked deal </span>
+          <span ng-switch-when="unlink"> Unlinked deal </span>
+        </span>
+
+                <span ng-if="item.post_type == 2">Left comment at </span>
+                <span ng-if="item.post_type == 1">Sent new email at</span>
+
+                <a ui-sref="main.two_column.deal_view({id: item.deal_id})">{{item.name + ' | ' + item.title}}</a>
+            </div>
+        </div>
+    </div>
+</perfect-scrollbar>

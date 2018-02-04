@@ -1,0 +1,73 @@
+<perfect-scrollbar [config]="config" class="page-wrapper" style="max-height: 100%;">
+
+    <div class="page-content">
+
+        <h1>IMAP - An introduction</h1>
+
+        <p>
+            IMAP and POP3 are protocols that allow you to download email messages from your mailbox and access them with Feasy app. Feasy can be configured on any standard IMAP email server using the IMAP and SMTP.
+        </p>
+
+        <p>
+            IMAP is more recent than POP and allows a two-way synchronization between the email server and your Feasy linked inbox. IMAP is recommended when you want to access the same account from multiple email clients.
+        </p>
+
+        <h1>Enable IMAP Access</h1>
+
+        <p>
+            To enable IMAP Access for your mail account:
+        </p>
+
+        <ol>
+            <li>
+                Log in to your Email account
+            </li>
+            <li>
+                Go to Settings, and choose, POP/ IMAP and Email Forwarding.
+            </li>
+            <li>
+                Under IMAP Access, select Enable.
+            </li>
+            <li>
+                Configure Auto-Expunge and Folder View Settings, if it necessary.
+            </li>
+        </ol>
+        <br>
+
+        <h1>IMAP and SMTP connection data</h1>
+
+        <p>
+            This information strongly depends on your email provider. You can find it on a settings page, or in a documentation.
+        </p>
+        
+        <p>
+            Incoming Server Settings configuration example (IMAP):
+        </p>
+        
+        <ul>
+            <li>Incoming Server Name: imap.yourmail.com</li>
+            <li>Port: 993</li>
+            <li>Require SSL: Yes</li>
+        </ul>
+
+        <p>
+            Outgoing Server Settings configuration example (SMTP):
+        </p>
+
+        <ul>
+            <li>Incoming Server Name: smtp.yourmail.com</li>
+            <li>Port: 465 with SSL or</li>
+            <li>Port: 587 with TLS</li>
+        </ul>
+        
+        <p>
+            In order to interact correctly with such services we need to use standard authentication.
+        </p>
+        
+        <ul>
+            <li>Login - usually coincides with email address you want to link</li>
+            <li>Password - your mailbox password</li>
+        </ul>
+    </div>
+
+</perfect-scrollbar>

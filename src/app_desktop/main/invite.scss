@@ -1,0 +1,48 @@
+.invite-list-descr {
+  margin-bottom:10px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 10px;
+  font-size: 14px;
+}
+
+.invite-list {
+  .invite-row {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 10px;
+
+    .invite-company {
+      font-size:16px;
+      font-weight:bold;
+      line-height:28px;
+    }
+
+    .invite-buttons {
+      float:right;
+
+      .fa {
+        margin:0;
+      }
+
+      .btn {
+        width: 34px;
+        padding: 0;
+        text-align: center;
+      }
+
+      .btn-danger {
+        @include border-radius-full(3px, 0, 0, 3px);
+      }
+
+      .btn-success {
+        @include border-radius-full(0, 3px, 3px, 0);
+      }
+    }
+
+    &:last-child {
+      margin-bottom:0;
+      border:0;
+      padding-bottom:0;
+    }
+  }
+}

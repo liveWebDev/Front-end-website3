@@ -1,0 +1,59 @@
+<div class="header">
+  <h1>
+    {{ currentCompany.title | cut:true:50 }}
+    <a ui-sref="main.company.company_manage" class="info-link"><i class="s s-info"></i> Info</a>
+    <a ui-sref="main.inbox.contact({companyId: currentCompany.firm_id})" class="header-contacts-link"><i class="s s-book"></i> Contacts</a>
+  </h1>
+</div>
+
+<div class="content">
+  <div class="block block-clear">
+    <div class="tab-filters content-inner">
+      <span class="tab-filter-title">In charge:</span>
+
+      <a class="tab-filter no-arrow" ng-class="{active: selectedUser.user_id == null}" ng-click="filterByUser(allUser)">All</a>
+      <a class="tab-filter" ng-repeat="filterUser in filterUsers" ng-class="{active: selectedUser.user_id == filterUser.user_id}" ng-click="filterByUser(filterUser)">
+        {{ filterUser.username }}
+
+        <span class="counter">
+          <span class="hot">{{ filterUser.stats.hot }}</span>
+          <span class="angle"
+                data-template="app_desktop/deal/userFilterItem.html"
+                data-placement="bottom-right"
+                data-trigger="click"
+                data-auto-close="true"
+                bs-popover
+                ng-click="clickPopover()"
+            >
+            <i class="fa fa-angle-down"></i>
+          </span>
+        </span>
+
+      </a>
+      <user-inviter></user-inviter>
+    </div>
+    <deal-creator submit="addDealCallback" config="slimConfig" company="currentCompany"></deal-creator>
+
+    <div class="content-inner">
+
+      <div class="deal-index-tabs">
+        <span class="selector-label">Showing deals:</span>
+        <a href="#" ng-click="changeTab('active')" class="btn btn-outline" ng-class="{active:selectedTabState.current == 'active'}"><span class="counter">{{selectedUser.stats.active}}</span> <span>Active deals</span></a>
+        <a href="#" ng-click="changeTab('postponed')" class="btn btn-outline" ng-class="{active:selectedTabState.current == 'postponed'}"><span class="counter">{{selectedUser.stats.postponed}}</span> <span>Postponed deals</span></a>
+        <a href="#" ng-click="changeTab('closed')" class="btn btn-outline" ng-class="{active:selectedTabState.current == 'closed'}"><span class="counter">{{selectedUser.stats.closed}}</span> <span>Closed deals</span></a>
+      </div>
+    </div>
+    <ng-include src="'app_desktop/deal/deal.list.html'"></ng-include>
+
+    <div class="deals-loader" ng-hide="isDataLoaded">
+      <div class="loader-inner">
+        <i class="fa fa-cog fa-3x fa-spin"></i>
+        <br/>loading...
+      </div>
+    </div>
+
+    <div class="no-deals" ng-show="isNoDeals">
+      Sorry, there are no deals yet
+    </div>
+  </div>
+</div>

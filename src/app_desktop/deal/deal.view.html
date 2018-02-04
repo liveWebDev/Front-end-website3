@@ -1,0 +1,211 @@
+<div class="header deal-view-header">
+  <h1 class="deal-title">
+    <a class="company-title" ui-sref="main.one_column.deal_index">
+      <span>{{user.currentCompany.title | cut:true:30}}</span>
+      <i class="s s-arrow_right"></i>
+    </a>
+    {{ deal.partner.name }} + {{ deal.title | cut:true:35 }}
+    <a class="edit" ng-click="openEditModal()">
+      <i class="s s-edit"></i>
+    </a>
+  </h1>
+  <div class="deal-status btn-selector-list" ng-switch on="deal.status">
+    <span class="selector-label">Deal status:</span>
+
+    <span class="deal-status-buttons" ng-switch-when="1">
+      <span class="btn btn-green">Active</span>
+        <a class="btn btn-outline" ng-if="user.id == deal.user_id" data-placement="bottom-right" data-template="app_desktop/deal/postponed.popover.tpl.html" data-auto-close="1" bs-popover>
+          Postpone
+        </a>
+      <a class="btn btn-outline" ng-if="user.id == deal.user_id" data-placement="bottom-right" data-template="app_desktop/deal/close.popover.tpl.html"  data-auto-close="1" bs-popover>
+        Close
+      </a>
+    </span>
+
+    <span class="deal-status-buttons" ng-switch-when="2">
+      <a class="btn btn-outline" ng-click="changeStatus(1)">Active</a>
+      <span class="btn btn-yellow">Postponed</span>
+      <a class="btn btn-outline"  data-placement="bottom-right" data-template="app_desktop/deal/close.popover.tpl.html"  data-auto-close="1" bs-popover>Close</a>
+    </span>
+
+
+    <span class="deal-status-buttons" ng-switch-when="3">
+      <a class="btn btn-outline" ng-click="changeStatus(1)">Active</a>
+      <span class="btn btn-red">Closed</span>
+    </span>
+  </div>
+
+</div>
+
+<div class="content deal-view-content" style="overflow-y: scroll">
+  <div class="block block-clear">
+
+    <div class="deals-loader" ng-hide="isDataLoaded">
+      <div class="loader-inner">
+        <i class="fa fa-cog fa-3x fa-spin"></i>
+        <br/>loading...
+      </div>
+    </div>
+
+    <div id="deal-view" class="deal-view" ng-show="isDataLoaded">
+      <div class="block-inner">
+
+        <div class="deal-subinfo">
+          <span class="subinfo-row date-row" ng-if="deal.updated_at == '1970-01-01T00:00:00.000Z'">
+            <i class="s s-time"></i> {{ 'Back from postpone' }}
+          </span>
+          <span class="subinfo-row date-row" ng-if="deal.updated_at != '1970-01-01T00:00:00.000Z'">
+            <i class="s s-time"></i> {{ deal.updated_at | timeAgo}}
+          </span>
+
+          <span class="subinfo-row user-link-row">
+            <!--ui-sref="main.one_column.user_profile({id: deal.user_id})"-->
+            <a ng-click="showProfile(ownerId)" class="user-link"><i class="s s-crown"></i> <span>{{ deal.owner }}</span></a>
+              <reassign-deal owner-id="ownerId" callback="reassignButton.callback" promise="mainPromise"></reassign-deal>
+          </span>
+        </div>
+
+        <div class="deal-comment-adder">
+
+          <div class="user-photo">
+            <a><img src="{{user.ava_30}}" ng-if="{{user.ava_30}}"></a>
+          </div>
+
+          <div class="comment-adder-content">
+            <div class="variant-list">
+              <a class="variant-item" ng-class="{active: commentFormType == 'internal'}" ng-click="changeCommentForm('internal')"><i class="s s-inline s-comment"></i> Internal comment<span class="arrow"></span></a>
+              <a class="variant-item green-item" ng-class="{active: commentFormType == 'email'}" ng-click="changeCommentForm('email')"><i class="s s-inline s-email"></i>  Send email<span class="arrow"></span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="internal-comment-form" ng-if="commentFormType == 'internal'">
+          <internal-comment></internal-comment>
+        </div>
+
+        <div class="deal-email-form" ng-if="commentFormType == 'email'">
+          <email-form item="emailItem" options="emailFormOptions" callback="emailCallback" threads="threads"></email-form>
+        </div>
+      </div>
+
+      <div class="comment-list block-inner">
+        <div class="comment-title">
+          Deal history
+        </div>
+
+        <div class="comment-item" ng-repeat="comment in comments">
+          <div class="comment-photo">
+            <div class="comment-index"> #{{ comments.length - $index }}</div>
+
+            <a href="#" class="photo">
+              <img src="{{comment.ava_30}}" ng-if="comment.ava_30">
+            </a>
+          </div>
+
+          <div class="comment-content">
+            <div class="comment-date">
+              {{ comment.date | timeAgo }}
+            </div>
+
+            <div class="comment-author" ng-if="comment.post_type > 1 || !comment.post_type">
+              {{ comment.username }}
+            </div>
+
+            <div class="comment-author" ng-if="comment.post_type == 1">
+              {{ comment.from }}
+            </div>
+
+            <div class="comment-body system" ng-if="!comment.post_type" ng-switch on="comment.systemMessage.action">
+              <div ng-switch-when="update">Deal info was updated</div>
+              <div ng-switch-when="init">Deal was created</div>
+              <div ng-switch-when="postpone">Deal was postponed to {{comment.systemMessage.date}}</div>
+              <div ng-switch-when="close">Deal was closed</div>
+              <div ng-switch-when="reassign">Deal was reassigned from {{ comment.systemMessage.from.name }} to {{ comment.systemMessage.to.name }}</div>
+              <div ng-switch-when="restore">Deal was restored</div>
+              <div ng-switch-when="link">Deal was linked with thread "{{ comment.systemMessage.thread }}"</div>
+              <div ng-switch-when="unlink">Deal was unlinked with thread "{{ comment.systemMessage.thread }}"</div>
+            </div>
+
+            <letter-view body="comment.body" promise="mainPromise" ng-if="comment.post_type == 1"></letter-view>
+            <div class="comment-body" ng-if="comment.post_type == 2" ng-bind-html="comment.body"></div>
+            <div class="inbox-attaches" ng-if="comment.hasAttaches">
+              <div class="attach-title">
+                Attachments
+              </div>
+              <div class="attach-list">
+                <div class="attach-item" ng-repeat="attach in comment.attaches">
+                  <span class="attach-item-title">{{ attach.name }}</span>
+                  <span class="attach-item-size">({{ attach.size | bytes }})</span>
+                  <a href="{{ attach.url }}" target="_blank" class="attach-download">Download</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="infinite-loader" ng-hide="commentsLoaded">
+          <div class="loader-inner">
+            <i class="fa fa-cog fa-spin"></i>
+            <br/>loading...
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="right-sidebar" perfect-scrollbar>
+  <label for="new-upload-file" class="upload-contract" ng-click="uploadContract($event)">
+    <span class="upload-file-button" ng-class="{active: isContractsUploaded}">
+      <i class="fa fa-file-text-o"></i>
+      <div class="button-text" ng-bind-html="uploadButtonText"></div>
+    </span>
+  </label>
+
+  <div class="sidebar-inner">
+    <div class="lined-block" ng-show="showUploads">
+      <div class="contacts-title">
+        Uploads
+      </div>
+
+      <div class="upload-list">
+        <div class="upload-item am-fade-and-slide-top" ng-repeat="contract in contracts">
+          <a class="upload-item-name" href="{{ contract.url }}" target="_blank">{{ contract.filename }}</a>
+
+          <div class="file-info upload-success">
+            {{ contract.date | date:'mediumDate' }}
+          </div>
+        </div>
+
+        <div class="upload-item am-fade-and-slide-top" ng-repeat="uploadItem in uploadItems">
+          <a class="upload-item-name" href="{{ uploadItem.url }}" target="_blank">{{ uploadItem.name }}</a>
+
+          <div class="upload-progress-bar" ng-if="uploadItem.status == 0">
+            <div class="progress-state" style="width:{{ uploadItem.percent + '%'}}"></div>
+          </div>
+
+          <div class="file-info upload-success" ng-if="uploadItem.status == 2">
+            Uploaded just now
+          </div>
+
+          <div class="file-info upload-error" ng-if="uploadItem.status == 1">
+            Could not upload file
+          </div>
+        </div>
+      </div>
+
+      <label for="new-upload-file" class="upload-file-link">
+        Add file <i class="fa fa-plus-circle"></i>
+        <input type="file" id="new-upload-file" nv-file-select uploader="uploader">
+      </label>
+    </div>
+
+    <div class="contacts-title-head">
+      {{ deal.partner.name }}
+    </div>
+
+    <deal-contacts deal-promise="mainPromise"></deal-contacts>
+
+  </div>
+</div>

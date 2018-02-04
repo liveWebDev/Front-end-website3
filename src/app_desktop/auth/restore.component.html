@@ -1,0 +1,52 @@
+<div class="no-auth-wrapper">
+    <div class="wrapper-with-image" perfect-scrollbar>
+        <div class="content-wrapper">
+            <landing-dudes></landing-dudes>
+            <div class="content-block block block-wide" id="content-block">
+                <div class="landing-text">
+                    <div class="no-auth-logo"><i class="s s-logo"></i></div>
+                    {{ common.title }}
+                </div>
+                <div class="landing">
+                    <form name="restoreForm" (ngSubmit)="restoreForm.form.valid && submit($event, password.value)" #restoreForm="ngForm" novalidate>
+                        <div class="form">
+                            <div class="field-row form-title">
+                                Password restoration
+                            </div>
+
+                            <div class="field-row">
+                                <input type="password" placeholder="Enter your password" name="password" [(ngModel)]="restoreForm.password" #password="ngModel" minlength="8" required validateEqual="confirm" reverse="true" />
+                                <div *ngIf="password.errors && password.touched">
+                                    <div [hidden]="!password.errors.required" class="form-help-error slide-down-help">
+                                        Password is required field
+                                    </div>
+                                    <div [hidden]="!password.errors.minlength" class="form-help-error slide-down-help">
+                                        Password is too short (minimum is 8 characters)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <input type="password" placeholder="Confirm your password" [(ngModel)]="restoreForm.confirm" name="confirm" #confirm="ngModel" required validateEqual="password" reverse="false">
+                                <div *ngIf="confirm.errors && confirm.touched">
+                                    <div [hidden]="!confirm.errors.required" class="form-help-error slide-down-help">
+                                        Confirmed password cannot be blank
+                                    </div>
+                                    <div [hidden]="!confirm.errors.validateEqual" class="form-help-error slide-down-help">
+                                        Password and confirmation must be same
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="field-row">
+                                <button class="btn btn-block landing-btn" >Reset password</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

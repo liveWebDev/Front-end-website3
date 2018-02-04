@@ -1,0 +1,79 @@
+<div class="block block-clear">
+    <div class="block-inner company-create-form">
+
+        <form name="inboxForm" (ngSubmit)="onSubmit()" #inboxForm="ngForm">
+            <div class="form">
+                <h1>Update your mailbox data</h1>
+                <a routerLink="/main/instructions">What do I need to link new Inbox?</a>
+                <br>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.email_address" name="email_address" placeholder="Email address you want to link" #email_address="ngModel" required="">
+                    <div [hidden]="!formErrors?.email_address">
+                        <div class="form-help-error slide-down-help">{{formErrors?.email_address}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.host_imap" name="host_imap" placeholder="Imap host" #host_imap="ngModel" required="">
+                    <div [hidden]="!formErrors?.host_imap">
+                        <div class="form-help-error slide-down-help">{{formErrors?.host_imap}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.host_smtp" name="host_smtp" placeholder="Smtp host" #host_smtp="ngModel" required="">
+                    <div [hidden]="!formErrors?.host_smtp">
+                        <div class="form-help-error slide-down-help">{{formErrors?.host_smtp}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.port_imap" name="port_imap" placeholder="Imap port" #port_imap="ngModel" required="">
+                    <div [hidden]="!formErrors?.port_imap">
+                        <div class="form-help-error slide-down-help">{{formErrors?.port_imap}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.port_smtp" name="port_smtp" placeholder="Smtp port" #port_smtp="ngModel" required="">
+                    <div [hidden]="!formErrors?.port_smtp">
+                        <div class="form-help-error slide-down-help">{{formErrors?.port_smtp}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.encryption_imap" name="encryption_imap" placeholder="Imap encryption type" #encryption_imap="ngModel" required="">
+                    <div [hidden]="!formErrors?.encryption_imap">
+                        <div class="form-help-error slide-down-help">{{formErrors?.encryption_imap}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.encryption_smtp" name="encryption_smtp" placeholder="Smtp encryption type" #encryption_smtp="ngModel" required>
+                    <div [hidden]="!formErrors?.encryption_smtp">
+                        <div class="form-help-error slide-down-help">{{formErrors?.encryption_smtp}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="text" class="form-control" [(ngModel)]="model.login" name="login" placeholder="Mailbox login" #login="ngModel" required="">
+                    <div [hidden]="!formErrors?.login">
+                        <div class="form-help-error slide-down-help">{{formErrors?.login}}</div>
+                    </div>
+                </div>
+                <br>
+                <div class="field-row">
+                    <input type="password" class="form-control" [(ngModel)]="model.password" name="password" placeholder="Mailbox password" #password="ngModel" required="">
+                    <div [hidden]="!formErrors?.password">
+                        <div class="form-help-error slide-down-help">{{formErrors?.password}}</div>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>

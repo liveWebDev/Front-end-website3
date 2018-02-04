@@ -1,0 +1,96 @@
+<div class="modal feasy-modal top am-fade-and-scale" tabindex="-1" role="dialog" aria-hidden="true" bsModal #dealLinkModal="bs-modal" (click)="toggleCompanySuggestion(false); matches = [];">
+    <div class="modal-dialog" style="width:580px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="closeDealModal()">
+                    <span aria-hidden="true">×</span> <span class="close-title">Close</span>
+                </button>
+                <h1 class="deal-link-title">
+                    <a [ngClass]="{active: isCreateDeal}" (click)="isCreateDeal = true" class="active">Create a new deal</a> or <a [ngClass]="{active: !isCreateDeal}" (click)="isCreateDeal = false">Choose existed one</a>
+                </h1>
+            </div>
+            <div class="modal-body link-deal-container">
+                <div [hidden]="!isCreateDeal">
+                    <div class="firm-choice">
+                        <a class="slim-select firm-input" (click)="watchCompanySuggestions($event)">
+                            <span class="select-value" style="white-space: nowrap; max-width: 85%; overflow: hidden; display: inline-block;">{{selectedCompany?.title}}</span> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul *ngIf="showCompanySuggestion" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+                            <li *ngFor="let company of companySuggestionList" role="presentation"
+                                (click)="pickCompany(company.title, company.id);"
+                                [hidden]="company.id === selectedCompany.id"
+                            ><a role="menuitem" tabindex="-1" >{{company.title}}</a></li>
+                        </ul>
+                    </div>
+                    <div class="content-inner deal-creator">
+                        <form name="slimCreatorForm" novalidate="" (submit)="createAndLink()">
+                            <input name="partner" placeholder="Partner name" class="partner-input slim" (keyup)="suggestPartner(selectedNewPartnerNameText)" required="" type="text" [(ngModel)]="selectedNewPartnerNameText" style="margin-right: 15px;" autocomplete="off">
+                            <ul *ngIf="partnerMatches.length" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+                                <li *ngFor="let item of partnerMatches" role="presentation"
+                                    (click)="pickPartner(item);"
+                                ><a role="menuitem" tabindex="-1" >{{item.name}}</a></li>
+                            </ul>
+                            <input name="title" class="name-input slim" placeholder="Deal name" required="" type="text" [(ngModel)]="newDealInput" style="margin-right: 15px;" autocomplete="off">
+
+                            <div *ngIf="!existingContacts.length">
+                                <p style="margin: 25px 0 10px;">The folowing contact will be added to the contacts book</p>
+                                <input class="name-input slim" placeholder="Contact name" style="margin-bottom: 10px;" type="text" [(ngModel)]="contactForm.name" name="name" (focus)="contactForm.clearError('name')">
+                                <div [hidden]="!contactForm.errors.name" style="margin-top: 5px;" class="form">
+                                    <div class="form-help-error slide-down-help">{{ contactForm.errors.name }}</div>
+                                </div>
+                                <br>
+                                <input class="name-input slim" placeholder="Contact email" type="text" [(ngModel)]="contactForm.emailFields[0].value" name="{{contactForm.emailFields[0].name}}" (focus)="contactForm.clearError('email')">
+                                <div [hidden]="!contactForm.errors.email" style="margin-top: 5px;" class="form">
+                                    <div class="form-help-error slide-down-help">{{ contactForm.errors.email }}</div>
+                                </div>
+                            </div>
+
+                            <button class="btn deal-button" [disabled]="creating" style="position: absolute; top: auto; min-width: 126px; bottom: 0; right: 0;">{{ creating ? '' : 'Create and link' }}<i *ngIf="creating" class="fa fa-cog fa-spin"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div [hidden]="isCreateDeal">
+                    <div class="firm-choice">
+                        <a class="slim-select firm-input" (click)="watchCompanySuggestions($event)">
+                            <span class="select-value" style="white-space: nowrap; max-width: 85%; overflow: hidden; display: inline-block;">{{selectedCompany?.title}}</span> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul *ngIf="showCompanySuggestion" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+                            <li *ngFor="let company of companySuggestionList" role="presentation"
+                                (click)="pickCompany(company.title, company.id);"
+                                [hidden]="company.id === selectedCompany.id"
+                            ><a role="menuitem" tabindex="-1" >{{company.title}}</a></li>
+                        </ul>
+                    </div>
+                    <form name="form.selectDeal" novalidate="" (submit)="linkErrors = ''; linkDeal();">
+                        <div class="deal-creator" style="position: relative;">
+                            <input name="title" class="name-input slim" (keyup)="suggestDealByDealOrPartner(selectedNewDealTitle); linkErrors = '';" placeholder="Enter deal or partner name" type="text" [(ngModel)]="selectedNewDealTitle" autocomplete="off">
+                            <ul *ngIf="matches.length" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+                                <li *ngFor="let item of matches" role="presentation"
+                                    (click)="pickDeal(item);"
+                                ><a role="menuitem" tabindex="-1" >{{item.partner_name + " | " + item.deal_title}}</a></li>
+                            </ul>
+
+                            <div *ngIf="!existingContacts.length">
+                                <p style="margin: 25px 0 10px;">The folowing contact will be added to the contacts book</p>
+                                <input class="name-input slim" placeholder="Contact name" style="margin-bottom: 10px;" type="text" [(ngModel)]="contactForm.name" name="name" (focus)="contactForm.clearError('name')">
+                                <div [hidden]="!contactForm.errors.name" style="margin-top: 5px;" class="form">
+                                    <div class="form-help-error slide-down-help">{{ contactForm.errors.name }}</div>
+                                </div>
+                                <br>
+                                <input class="name-input slim" placeholder="Contact email" type="text" [(ngModel)]="contactForm.emailFields[0].value" name="{{contactForm.emailFields[0].name}}" (focus)="contactForm.clearError('email')">
+                                <div [hidden]="!contactForm.errors.email" style="margin-top: 5px;" class="form">
+                                    <div class="form-help-error slide-down-help">{{ contactForm.errors.email }}</div>
+                                </div>
+                            </div>
+
+                            <button class="btn" style="min-width: 111px; position: absolute; bottom: 0; right: 0;" [disabled]="creating">{{ creating ? '' : 'Link the deal' }}<i *ngIf="creating" class="fa fa-cog fa-spin"></i></button>
+                            <div [hidden]="!linkErrors" style="margin-top: 10px;" class="form">
+                                <div class="form-help-error slide-down-help">Sorry, there is no such deal</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

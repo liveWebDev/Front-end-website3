@@ -1,0 +1,54 @@
+<div class="no-auth-wrapper">
+  <div class="wrapper-with-image" perfect-scrollbar>
+    <div class="content-wrapper">
+      <landing-dudes></landing-dudes>
+      <div class="content-block block block-wide" id="content-block">
+        <div class="landing-text">
+          <div class="no-auth-logo"><i class="s s-logo"></i></div>
+          {{ common.title }}
+        </div>
+        <div class="landing">
+          <div class="form">
+            <form name="loginForm" (ngSubmit)="login()" novalidate #f="ngForm" >
+              <div class="field-row">
+                <input type="email" placeholder="Please, enter your email" class="form-control" name="email" [(ngModel)]="model.email" #email="ngModel" required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$" validate-onblur/>
+                <div *ngIf="email.errors && (email.dirty || email.touched || submitAttempt)">
+                  <div [hidden]="!email.errors.required" class="form-help-error slide-down-help">
+                    Email is required
+                  </div>
+                  <div [hidden]="!email.errors.pattern" class="form-help-error slide-down-help">
+                    Email is invalid
+                  </div>
+                </div>
+              </div>
+              <div class="field-row">
+                <input type="password" placeholder="Please, enter your password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required />
+                <div *ngIf="password.errors && (submitAttempt || password.touched)">
+                  <div [hidden]="!password.errors.required" class="form-help-error slide-down-help">
+                    Password is required field
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="errorMsg">
+                <div class="form-help-error slide-down-help">{{ errorMsg }}</div>
+              </div>
+              <button type="submit" style="display:none"><i class="fa fa-cog fa-spin"></i>hidden submit</button>
+            </form>
+
+            <div class="field-row sign-up-field">
+              <button class="btn btn-block landing-btn" (click)="f.ngSubmit.emit()"  [disabled]="loading">{{ loading ? '' : 'Sign in' }}<i *ngIf="loading" class="fa fa-cog fa-spin"></i></button>
+              <div class="under-button-links">
+                <a [routerLink]="['/forgot']" class="forgot-password">Forgot password?</a>
+                <span class="sep">/</span>
+                <a [routerLink]="['/register']">register a new account</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

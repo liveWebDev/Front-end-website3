@@ -1,0 +1,59 @@
+.letter-container {
+  font-family: "Helvetica", sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 300;
+  p {
+    margin: 0 0 1em;
+  }
+  div.gmail_quote,
+  [type=cite] {
+    border-left: 1px solid #E7EBEE;
+    padding-left: 5px;
+    color: #500050;
+  }
+
+  .btn {
+    color: #0D7DD1;
+    font-family: "Helvetica", sans-serif;
+    display: inline-block;
+    background: #10D4C6;
+    color: #fff;
+    border: 1px solid #1FBAB5;
+    padding: 0 15px;
+    text-decoration: none;
+    cursor: pointer;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 3px;
+    font-size:14px;
+  }
+  .open-quote {
+    font-weight: bold;
+    font-size: 11px;
+  }
+  .plain-text {
+    white-space:pre-wrap;
+    widht:100%;
+  }
+  .email-reply {
+    border:1px solid #e7ebee;
+    padding:10px;
+    margin-top:10px;
+  }
+  .email-reply .email-reply-content {
+    display:none;
+  }
+  .email-reply.active > .email-reply-content {
+    display:block;
+  }
+  .email-reply .email-reply-more {
+    display:block;
+  }
+  .email-reply-more a {
+    color:#179BFF;
+  }
+  .email-reply.active > .email-reply-more {
+    display:none;
+  }
+}

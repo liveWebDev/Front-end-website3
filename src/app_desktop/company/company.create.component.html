@@ -1,0 +1,27 @@
+<div class="block block-clear">
+    <div class="block-inner company-create-form">
+        <form name="companyForm" #newCompanyForm="ngForm" (ngSubmit)="createCompany($event, title.value, description.value)" novalidate>
+            <div class="form">
+                <h1>Create a new company</h1>
+                <div class="field-row">
+                    <input type="text" #title="ngModel" placeholder="Please put the company name here" [ngModel]="newCompany.title" name="title" autocomplete="off" required
+                    (keydown.control.Enter)="submitButton.click()">
+
+                    <div *ngIf="(title.errors && submitAttempt)">
+                        <div [hidden]="!title.errors.required" class="form-help-error slide-down-help">
+                            Title is required field
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field-row">
+                    <textarea placeholder="Describe your company in a few words, thanks" #description="ngModel" [ngModel]="newCompany.description" name="description" (keydown.control.Enter)="submitButton.click()"></textarea>
+                </div>
+
+                <div class="field-row">
+                    <button #submitButton class="btn btn-large" type="submit">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

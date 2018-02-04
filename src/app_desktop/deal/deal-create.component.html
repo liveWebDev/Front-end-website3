@@ -1,0 +1,60 @@
+<form name="slimCreatorForm" (ngSubmit)="createDeal($event)" #f="ngForm" novalidate>
+  <div style="position: relative; width: 30%; display: inline-block;">
+    <input
+    style="width: 100%;"
+      type="text"
+      name="partner"
+      placeholder="{{'Partner\'s company name'}}"
+      class="partner-input"
+      [(ngModel)]="newDeal.name"
+      minlength="2"
+      #partnerName="ngModel"
+      #partner
+      (blur)="clear();"
+      (focus)="showMatches()"
+      (keydown)="handleKeyEvent($event, partner.value)"
+      (keydown.control.Enter)="submitButton.click()"
+      tooltip-validate
+      autocomplete="off"
+      tooltip="Please, describe partner name"
+      (click)="partnerEmpty.hide()"
+      triggers=""
+      #partnerEmpty="bs-tooltip"
+      placement="bottom"
+      required>
+    <!--<div *ngIf="(partnerName.errors && submitAttempt)" style="position: absolute; color: red; padding: 9px 0 0 7px;">
+      <div [hidden]="!partnerName.errors.required" class="form-help-error slide-down-help">
+        Please fill this field
+      </div>
+    </div>-->
+    <ul *ngIf="showAutocomplete && !!matches.length" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+        <li *ngFor="let match of matches; let idx = index" role="presentation" tabindex="-1"
+            (click)="pick(match.name, match.id);" [style.background-color]="idx == focusedIdx ? '#337cb7' : '#fff'"
+        ><a role="menuitem" tabindex="-1" >{{match.name}}</a></li>
+    </ul>
+  </div>
+  <div style="position: relative; width: 68%; display: inline-block;">
+    <input type="text" name="title"
+    style="width: 100%;"
+    [(ngModel)]="title"
+    class="name-input"
+    placeholder="Describe the deal in a couple of words"
+    (keydown.control.Enter)="submitButton.click()"
+    tooltip-validate
+    #titleName="ngModel"
+    #titleInput
+    autocomplete="off"
+    tooltip="Deal name cannot be blank"
+    (click)="titleEmpty.hide()"
+    #titleEmpty="bs-tooltip"
+    triggers=""
+    placement="bottom"
+    required>
+    <!--<div *ngIf="(titleName.errors && submitAttempt)" style="position: absolute; color: red; padding: 9px 0 0 13px;">
+      <div [hidden]="!titleName.errors.required" class="form-help-error slide-down-help">
+        Please fill this field
+      </div>
+    </div>-->
+  </div>
+  <button #submitButton class="btn deal-button">{{buttonCaption ? buttonCaption : 'Create a new deal'}}</button>
+</form>

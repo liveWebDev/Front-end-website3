@@ -1,0 +1,35 @@
+<perfect-scrollbar [config]="config" class="page-wrapper" style="max-height: 100%;">
+    <div class="page-head">
+        <h1>About Feasy</h1>
+    </div>
+
+    <div class="large-text">
+        We're group of 6 mad professionals having fun in our brave mission to change the picture of sales forces distribution.
+    </div>
+
+    <div class="video-place"></div>
+
+    <div class="page-content">
+        <h1>What we’re doing there</h1>
+
+        <p>
+            Previously this system has been made by Anton Gladkov and Vyacheslav Trushkin for Aviasales, when we built up a Business Development dept. from the ground there. It has had a huge success in Aviasales - sales grew up to the sky - so we decide to give our system to other companies. Within the next 10 months more than ten huge international companies tried Feasy (previously it was named Overdue Deals) and increased their sales rates for averagely 8-12 times. Not percents - they multiplied rates by 8-12 times! Konstantin Kalinov (founder of Aviasales and Go Travel Un Limited holding) told us that we have to make a global product of this tool, coz it rocks. That's what we are doing.
+        </p>
+
+        <p>
+            The system is very easy to use, even monkey can manage its deals with feasy (we tried few times, no monkeys been injured). At the same time we know something about sales, and we make professionals who manage deals in feasy to follow some rules, that can bring them to success - they just stop mistaking, stop loosing emails, deals, stop not giving a fuck of what they have done on a previous week and what are they going to do in next 15 minutes.
+        </p>
+
+        <p>
+            At the same time we are giving to a company management a brilliant tool to see exactly what is happening in a moment of time, regardless the size of a sales crew. You can have a clearest picture of what's happening and manage things as easy as having a glass of beer. It's a wonderful feeling guys, just try that.
+        </p>
+    </div>
+
+    <h3>Change log</h3>
+    <div class="changelog-list">
+        <div class="changelog-item" *ngFor="let item of changelogItems">
+            <div class="changelog-title">{{ item.title }}</div>
+            <div class="page-content" [innerHTML]="item.body"></div>
+        </div>
+    </div>
+</perfect-scrollbar>

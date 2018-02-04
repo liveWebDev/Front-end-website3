@@ -1,0 +1,24 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin border-radius-full($topLeft, $topRight, $bottomRight, $bottomLeft) {
+  -webkit-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  -moz-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  -ms-border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+  border-radius: $topLeft $topRight $bottomRight $bottomLeft;
+}
+
+@mixin box-shadow($offsetX, $offsetY, $blur, $spread, $color) {
+  -webkit-box-shadow: $offsetX $offsetY $blur $spread $color;
+  -moz-box-shadow: $offsetX $offsetY $blur $spread $color;
+  box-shadow: $offsetX $offsetY $blur $spread $color;
+}
+
+@mixin gradient-two-colors($color1, $color2) {
+  background-image: linear-gradient($color1, $color2);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$color1}', endColorstr='#{$color2}', GradientType=0);";
+}

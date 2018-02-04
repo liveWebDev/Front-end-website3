@@ -1,0 +1,166 @@
+@import "../vendor.scss";
+@import "../index.scss";
+
+.no-auth-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+
+  .wrapper-with-image {
+    top: 0;
+    bottom: 0;
+    left:0;
+    right:0;
+    overflow: hidden;
+    position: absolute;
+    background: #F4F4F4 url(/assets/images/bgpattern_700.jpg) repeat-x bottom center;
+    background-attachment: fixed;
+  }
+
+  .content-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .ali-g {
+    position:fixed;
+    left:0px;
+    bottom:30px;
+    top:45px;
+    width:auto;
+    text-align:center;
+
+    img,
+    embed{
+      height:100%;
+      width:auto;
+    }
+  }
+
+  .neo {
+    position:fixed;
+    right:0;
+    bottom:30px;
+    top:85px;
+    text-align:center;
+
+    img {
+      height:100%;
+      width:auto;
+    }
+  }
+
+  &:before {
+    content: " ";
+    display: table;
+  }
+
+  .content-block {
+    width:300px;
+    margin:0 auto 0;
+    position: relative;
+
+    .logo {
+      position:absolute;
+      top: -50px;
+      font-weight:bold;
+      font-size:22px;
+      text-align: center;
+      width:100%;
+      margin-left: -20px;
+    }
+  }
+}
+.landing-text {
+  font-weight:500;
+  font-size: 36px;
+  color: #212121;
+  line-height: 42px;
+  text-align:center;
+  margin-bottom:23px;
+
+  span {
+    font-size:26px;
+  }
+  .no-auth-logo {
+    font-size:165px;
+    margin-bottom:30px;
+    height:165px;
+
+    .s {
+      line-height:165px;
+    }
+  }
+}
+
+.landing-btn,
+.landing-btn:active,
+.landing-btn:hover {
+  border-radius: 4px;
+  height:44px;
+  line-height:44px;
+  font-size: 19px;
+  color: #fff;
+}
+
+.landing {
+  input[type=text],
+  input[type=email],
+  input[type=password] {
+    background: #FFFFFF;
+    border:1px solid #AEAEAE;
+    @include border-radius(4px);
+    font-weight:300;
+    font-size: 17px;
+    color: #242432;
+    line-height: 44px;
+    height:44px;
+
+    &:focus {
+      border:2px solid #2782CE;
+    }
+  }
+
+  .form {
+    .field-row {
+      color:#242432;
+
+      &.step-title {
+        font-size:24px;
+
+      }
+    }
+  }
+
+}
+
+.sign-up-field {
+  margin-top: 15px;
+}
+
+
+.under-button-links {
+  margin:20px 0;
+  text-align:center;
+  color:#242432;
+
+  .sep {
+    margin:0 12px;
+  }
+
+  a {
+    text-decoration: none;
+    color:#242432;
+
+    &:hover {
+      color:#247FCE;
+    }
+  }
+}
+
+
+

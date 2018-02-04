@@ -1,0 +1,21 @@
+<div class="content-inner deal-creator">
+  <form name="slimCreatorForm" novalidate>
+    <input
+      type="text"
+      name="partner"
+      placeholder="Partner name"
+      class="partner-input slim"
+      ng-model="item.partner"
+      bs-options="partner as partner.name for partner in searchPartner($viewValue)"
+      data-min-length="2"
+      data-trim-value="false"
+      ng-trim="false"
+      bs-typeahead
+      onfocus="angular.element(this).attr('autocomplete', 'off')"
+      tooltip-validate
+      error-data="errorData.partner"
+      required>
+    <input type="text" name="title" ng-model="item.title" class="name-input slim" placeholder="Deal name" tooltip-validate error-data="errorData.title" required>
+    <button class="btn deal-button" item="button" load-button ng-if="button">{{config.btnTitle}}</button>
+  </form>
+</div>

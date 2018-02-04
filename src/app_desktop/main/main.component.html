@@ -1,0 +1,229 @@
+<div class="app">
+    <div class="sidebar">
+        <perfect-scrollbar class="sidebar-inner" [config]="config">
+            <div class="sidebar-search-block">
+                <input class="sidebar-search" placeholder="Search on feasy" [(ngModel)]="searchQuery" (focus)="isSearch = true;" (input)="globalSearch()" (paste)="globalSearch()">
+                <span class="search-button"><i class="fa fa-search"></i></span>
+            </div>
+
+            <div class="user-head">
+                <a routerLink="/main/user/0" class="user-photo"><img src="{{ userAvatar?.avatarName }}"></a>
+            </div>
+
+            <ul class="sidebar-list">
+                <li class="sidebar-section">
+                    My companies
+                </li>
+
+                <!-- Owned firms list -->
+                <li *ngFor="let company of companies_own ">
+                    <div class="hot" *ngIf="company.hot_deals" [hidden]="company.hot_deals == 0">
+                        <span>{{ company.hot_deals }}</span>
+                    </div>
+                    <a routerLink="/main"  class="sidebar-item company" [ngClass]="{'active': company.id==currentFirmId}" (click)="loadCompany(company.id, company.title)">
+                        <span class="sidebar-item-label">{{ company.title | slice:0:15 }}</span>
+                    </a>
+                </li>
+
+                <li class="with-padding with-line">
+                    <a routerLink="/main/company-create" class="sidebar-item add-company-link">
+                        <i class="s s-inline s-plus_circle"></i>
+                        <span>Add new </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-section">
+                    My friends companies
+                    <a class="counter" *ngIf="(invite | json) != '{}'" (click)="invitesListModal.show()">
+                        +Invite
+                    </a>
+                </li>
+
+                <!-- Invited firms list -->
+                <li *ngFor="let company of companies_invited ">
+                    <div class="hot" *ngIf="company.hot_deals" [hidden]="company.hot_deals == 0">
+                        <span>{{ company.hot_deals }}</span>
+                    </div>
+                    <a routerLink="/main" class="sidebar-item company" [ngClass]="{'active': company.id==currentFirmId}" (click)="loadCompany(company.id, company.title)">
+                        <span class="sidebar-item-label" style="color: #e8eef3;">{{ company.title | slice:0:15 }}</span>
+                    </a>
+                </li>
+                <li class="with-padding with-line">
+                </li>
+            </ul>
+
+            <ul class="sidebar-list inbox-list">
+                <li class="sidebar-section" ng-show="companies.length > 0">
+                    Inboxes
+                </li>
+
+                <li *ngFor="let email of emails">
+                    <i class="fa {{toggledFolders ? 'fa-minus' : 'fa-plus'}}" aria-hidden="true" *ngIf="showEmailsFolders && currentInboxId == email.id && emailFolders.representation.length" style="position: absolute; top: 8px; left: 30px; font-size: 12px; cursor: pointer; z-index: 2; color: #ffffff;" (click)="toggledFolders = !toggledFolders"></i>
+
+                    <a routerLink="/main/inbox/{{email.id}}" class="sidebar-item company {{(showEmailsFolders && currentInboxId == email.id) ? 'active' : ''}}" [style.pointerEvents]="(showEmailsFolders && currentInboxId == email.id && !currentInboxFolderId) ? 'none' : 'auto'">
+
+                        <span class="sidebar-item-label" style="overflow: hidden; text-overflow: ellipsis; padding-left: 45px;" [title]="email.email_address">{{ email.email_address}}</span>
+
+                    </a>
+
+                    <ul *ngIf="showEmailsFolders && currentInboxId == email.id && toggledFolders">
+
+                        <li *ngFor="let folder of emailFolders.representation; let folderIndex = index;">
+
+                            <a class="sidebar-item company {{(currentInboxFolderId == folderIndex) ? 'active' : ''}}" routerLink="/main/inbox/{{email.id}}/folder/{{folderIndex}}">
+                                <span class="sidebar-item-label" style="padding-left: 60px;">{{ folder | slice:0:20 }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="with-padding with-line">
+                    <a routerLink="/main/inbox-create" class="sidebar-item add-company-link">
+                        <i class="s s-inline s-plus_circle"></i>
+                        <span>
+              Link new mailbox
+            </span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="sidebar-list">
+                <li>
+                    <!--ng-click="switchPage('main.one_column.about')"-->
+                    <a  class="sidebar-item company page" ng-class="{active: activePageClass('main.one_column.about')}" routerLink="/main/about" routerLinkActive="active">
+            <span class="sidebar-item-label">
+              <i class="s s-fuck"></i>
+            About
+            </span>
+                    </a>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+        <div class="foot-logo">
+            Fcuking Easy CRM
+        </div>
+    </div>
+
+    <div class="global-search-block am-slide-left" [ngClass]="{active: isSearch}">
+        <div class="header with-spacer">
+            <button type="button" class="close" aria-label="Close" (click)="hideSearch()">
+                <span aria-hidden="true">×</span> <span class="close-title">Close</span>
+            </button>
+            <h1>Search results <span *ngIf="searchCount">{{searchCount}}</span></h1>
+        </div>
+
+        <perfect-scrollbar [config]="config" style="height: calc(100vh - 66px);">
+
+            <div class="search-loader" [hidden]="!searchProgress">
+                <div class="loader-inner"><i class="fa fa-cog fa-spin"></i> loading...</div>
+            </div>
+            <div class="search-loader" [hidden]="!(!searchProgress && !searchCount)">
+                <div class="loader-inner">Did not find anything, try to change search query</div>
+            </div>
+
+            <div class="search-results ps-container ps-in-scrolling" [hidden]="searchProgress || (!searchProgress && !searchCount)" style="top: 0; overflow: visible;">
+                <div>
+                    <div class="search-results-inner">
+
+                        <div class="search-section" *ngIf="searchResults.contacts?.length">
+                            <div class="search-section-title">Contacts</div>
+
+                            <div class="search-list">
+                                <div class="search-item" *ngFor="let searchItem of searchResults.contacts" (click)="showSearchResult('contact', searchItem)">
+                                    <div class="search-item-title">
+                                        <span>{{ searchItem.name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="search-section" *ngIf="searchResults.deals?.length">
+                            <div class="search-section-title">Deals</div>
+
+                            <div class="search-list">
+                                <div *ngFor="let searchItem of searchResults.deals" (click)="showSearchResult('deal', searchItem)" class="search-item deal-item {{searchItem.updated_at | dealTimerStatus}}">
+                                    <div class="search-item-title">
+                                        <span >{{searchItem.partner_name}} | {{searchItem.title}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="search-section" *ngIf="searchResults.letters?.length">
+                            <div class="search-section-title">Emails</div>
+
+                            <div class="search-list">
+                                <div class="search-item" *ngFor="let searchItem of searchResults.letters" (click)="showSearchResult('letter', searchItem)">
+                                    <div class="search-item-title">
+                                        <span>{{searchItem.subject}}</span>
+                                    </div>
+                                    <div class="search-item-author">{{searchItem.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+
+    <div class="wrapper" [ngClass]="{'one-column': layout == 1, 'two-column': layout == 2 }">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>
+
+<div class="overlay" (click)="hideSearch()" [ngStyle]="{'display': isSearch ? 'block' : 'none'}"></div>
+
+
+<div class="modal fade feasy-modal" bsModal #invitesListModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog" style="width:580px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="invitesListModal.hide()">
+                    <span aria-hidden="true">×</span>
+                    <span class="close-title">Close</span>
+                </button>
+                <h1>Join requests</h1>
+            </div>
+            <div class="modal-body" *ngIf="!emailNotLinked">
+                <div style="margin-bottom:20px;">You were invited to join a follow company</div>
+                <div class="invite-list">
+                    <div class="invite-row">
+                        <div class="invite-buttons">
+                            <a (click)="declineInvite()" class="btn btn-small btn-danger">
+                                <i class="fa fa-times"></i>
+                            </a>
+                            <a class="btn btn-small btn-success" (click)="acceptInvite()">
+                                <i class="fa fa-check"></i>
+                            </a>
+                        </div>
+                        <div class="invite-company">{{ invite.company_name }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" *ngIf="emailNotLinked">
+                <div style="margin-bottom:20px;">You've followed the company invite link from the email, but we haven't found it among your email addresses. If you want to join that company with this account, would you like to link it?</div>
+                <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                    <a class="btn btn-success" (click)="invitesListModal.hide()" routerLink="/main/inbox-create">Link my account with this email</a>
+                    <a class="btn btn-success" routerLink="/logout">I want to accept invite with another account</a>
+                </div>
+                <div style="margin-top: 20px; text-align: right">
+                    <a class="btn btn-danger" (click)="deleteInvite()">Delete invite</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ng-toast ng-toast--right ng-toast--bottom ng-toast--animate-slide">
+    <ul class="ng-toast__list" style="padding-bottom: 20px;">
+        <li class="ng-toast__message feasy-notify" *ngFor="let message of toastMessages; let i = index;" [ngClass]="message.type">
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" (click)="closeToast(i)">×</button>
+                <span>{{message.message}} </span>
+            </div>
+        </li>
+    </ul>
+</div>

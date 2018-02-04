@@ -1,0 +1,121 @@
+<perfect-scrollbar class="block block-clear" [config]="config" style="max-height: 100%; max-height: 100%; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+    <div class="block-inner company-create-form">
+
+        <h1>Link new mailbox</h1>
+        <a routerLink="/main/instructions">What do I need to link new Inbox?</a>
+        <br>
+        <br>
+
+        <div class="logo-outer" (click)="pickMailProvider(provider, false); provider.name != 'google' && linkMailModal.show(); provider.name == 'google' && callForGapiAuthLink()" *ngFor="let provider of [{
+            name: 'exchange',
+            src: 'assets/images/logo-exchange.png',
+            alt: 'exchange mail'
+        }, {
+            name: 'google',
+            src: 'assets/images/logo-google.png',
+            alt: 'google mail'
+        }, {
+            name: 'icloud',
+            src: 'assets/images/logo-icloud.png',
+            alt: 'icloud mail'
+        }, {
+            name: 'yahoo',
+            src: 'assets/images/logo-yahoo.png',
+            alt: 'yahoo mail'
+        }, {
+            name: 'yandex',
+            src: 'assets/images/logo-yandex.png',
+            alt: 'yandex mail'
+        }, {
+            name: 'mail',
+            src: 'assets/images/logo-mail.png',
+            alt: 'mail.ru mail'
+        }]" id="{{provider.name + '-link-trigger'}}">
+            <div class="logo-contatiner">
+                <img src="{{provider.src}}" alt="{{provider.alt}}">
+            </div>
+        </div>
+
+        <div class="logo-outer" (click)="pickMailProvider('other', true); linkMailModal.show()">
+            <div class="logo-contatiner">
+                <p>Other...</p>
+            </div>
+        </div>
+
+    </div>
+</perfect-scrollbar>
+
+<div class="modal feasy-modal top am-fade-and-scale" tabindex="-1" role="dialog" aria-hidden="true" bsModal #linkMailModal="bs-modal" (click)="closeBox();">
+    <div class="modal-dialog" style="width:580px;" (click)="$event.stopPropagation();">
+        <div class="modal-content">
+            <div class="feasy-modal-header" style="text-align: center;">
+                <img src="{{logo.src}}" alt="{{logo.alt}}" *ngIf="logo.src" style="margin-top: 10px;">
+            </div>
+
+            <div class="modal-body link-deal-container">
+                <form name="inboxForm" (ngSubmit)="onSubmit()" #inboxForm="ngForm" novalidate>
+                    <div class="form inbox-form">
+
+                        <div class="field-row">
+                        <input type="text" class="form-control" [(ngModel)]="model.login" name="login" placeholder="Login" #login="ngModel" required="" (focus)="clearError('login')" (blur)="validateDataField('', 'login', model.login)">
+                        <div class="form-help-error slide-down-help slim-error" [ngClass]="{visible: formErrors?.login}">{{formErrors?.login}}</div>
+                        </div>
+                        <br>
+                        <div class="field-row">
+                        <input type="password" class="form-control" [(ngModel)]="model.password" name="password" placeholder="Password" #password="ngModel" required="" (focus)="clearError('password')" (blur)="validateDataField('', 'password', model.password)">
+                        <div class="form-help-error slide-down-help slim-error" [ngClass]="{visible: formErrors?.password}">{{formErrors?.password}}</div>
+                        </div>
+
+                        <div [hidden]="!fullEmailLinkForm">
+                            <br>
+                            <br>
+                            <div class="field-row">
+                                <input type="text" class="form-control" [(ngModel)]="model.host_imap" name="host_imap" placeholder="Imap host" #host_imap="ngModel" required="" (focus)="clearError('host_imap')" (blur)="validateDataField('', 'host_imap', model.host_imap)">
+                                <div class="form-help-error slide-down-help slim-error" [ngClass]="{visible: formErrors?.host_imap}">{{formErrors?.host_imap}}</div>
+                            </div>
+                            <br>
+                            <div class="field-row">
+                                <input type="text" class="form-control" [(ngModel)]="model.host_smtp" name="host_smtp" placeholder="Smtp host" #host_smtp="ngModel" required="" (focus)="clearError('host_smtp')" (blur)="validateDataField('', 'host_smtp', model.host_smtp)">
+                                <div class="form-help-error slide-down-help slim-error" [ngClass]="{visible: formErrors?.host_smtp}">{{formErrors?.host_smtp}}</div>
+                            </div>
+                            <br>
+
+                            <div class="field-row">
+                                <p>IMAP connection port and encryption type</p>
+                                <div class="firm-choice" style="position: relative;">
+                                    <a class="slim-select firm-input" (click)="watchImapPortList($event)" style="width: 100%; box-sizing: border-box; padding: 7px; border: 1px solid #DEE6EA; color: #7A8095; border-radius: 4px;">
+                                        <span class="select-value" style="line-height: 20px; display: block; text-transform: capitalize; position: relative; top: -1px;">{{selectedImapPort ? selectedImapPort : 'Select'}}</span> <i class="fa fa-caret-down" style="right: 10px; top: 9px;"></i>
+                                    </a>
+                                    <ul *ngIf="showImapPortList" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 30px; left: 0px; display: block; visibility: visible;">
+                                        <li *ngFor="let port of model.allowedImapPorts" role="presentation" (click)="pickPort('imap', port);">
+                                            <a role="menuitem" tabindex="-1">{{port.port}} - {{port.encryption.toUpperCase()}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="field-row">
+                                <p>SMTP connection port and encryption type</p>
+                                <div class="firm-choice" style="position: relative;">
+                                    <a class="slim-select firm-input" (click)="watchSmtpPortList($event)" style="width: 100%; box-sizing: border-box; padding: 7px; border: 1px solid #DEE6EA; color: #7A8095; border-radius: 4px;">
+                                        <span class="select-value" style="line-height: 20px; display: block; position: relative; top: -1px;">{{selectedSmtpPort ? selectedSmtpPort : 'Select'}}</span> <i class="fa fa-caret-down" style="right: 10px; top: 9px;"></i>
+                                    </a>
+                                    <ul *ngIf="showSmtpPortList" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 30px; left: 0px; display: block; visibility: visible;">
+                                        <li *ngFor="let port of model.allowedSmtpPorts" role="presentation" (click)="pickPort('smtp', port);">
+                                            <a role="menuitem" tabindex="-1">{{port.port}} - {{port.encryption.toUpperCase()}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-default" [disabled]="submittingForm" style="min-width: 76px; float: right;">{{ submittingForm ? '' : 'Submit' }}<i *ngIf="submittingForm" class="fa fa-cog fa-spin"></i></button>
+                        <a href="#" class="btn btn-danger" (click)="closeBox($event)">Back</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

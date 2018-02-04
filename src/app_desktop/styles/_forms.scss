@@ -1,0 +1,146 @@
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+.form {
+  .field-row {
+    margin-bottom:15px;
+    color: #7B7B7B;
+
+    &:last-child {
+      margin-bottom:0;
+    }
+
+    &.form-title {
+      font-size:18px;
+      font-weight:bold;
+      color:$color-dark-grey2;
+    }
+
+    &.field-inline {
+      label {
+        display:block;
+        margin:0 0 5px 5px;
+        color: #7B7B7B;
+      }
+    }
+  }
+
+  .form-help-error {
+    margin-top:5px;
+    font-size:14px;
+    color:rgb(252, 54, 54);
+    padding:0 7px;
+  }
+
+  .slim-error {
+    margin-top:5px;
+    font-size:14px;
+    color:rgb(252, 54, 54);
+    padding:0;
+  }
+
+  &.contact-form .slim-error,
+  &.inbox-form .slim-error {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: 0.3s ease;
+
+    &.visible {
+      max-height: 100px;
+      opacity: 1;
+    }
+  }
+}
+
+input[type=text],
+input[type=password],
+input[type=email],
+textarea {
+  width:100%;
+  box-sizing: border-box;
+  padding:7px;
+  border: 1px solid #DEE6EA;
+  color: $font-color;
+
+  @include border-radius(4px);
+
+  &.medium {
+    height:30px;
+    font-size:14px;
+    padding:0 5px;
+  }
+
+  &:focus {
+    outline: none;
+    border-color:#86BFE2;
+  }
+
+  &.error {
+    border-color:#FF4C35;
+  }
+
+  &.slim {
+    border:none;
+    border-bottom:1px solid $input-border-color;
+    padding:0 0 5px 0;
+    height:33px;
+
+    @include border-radius(0);
+
+    &.bold-slim {
+      border-bottom-width: 2px;
+    }
+  }
+}
+
+.slim-select {
+  padding:0 0 5px 0;
+  height:33px;
+  border-bottom:2px solid $input-border-color;
+  color:$font-color-dark;
+  text-decoration: none;
+  line-height: 28px;
+  display:inline-block;
+  position:relative;
+  vertical-align: top;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  .select-value {
+    margin-right:20px;
+  }
+
+  .fa {
+    position:absolute;
+    right:2px;
+    top:4px;
+  }
+}
+
+textarea {
+  height:8em;
+}
+
+:invalid {
+  box-shadow: none;
+}
+
+:-moz-submit-invalid {
+  box-shadow: none;
+}
+
+:-moz-ui-invalid {
+  box-shadow:none;
+}
+
+.right-button {
+  float:right;
+  margin-left:15px;
+}

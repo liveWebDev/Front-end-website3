@@ -1,0 +1,166 @@
+@import "../styles/_variables";
+@import "../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables";
+@import "../styles/_mixins";
+@import "../styles/_buttons";
+
+.user-invite-modal {
+  .tooltip-inner {
+    background-color: #ff4c35;
+    color: #fff;
+    padding: 10px;
+    max-width: 320px;
+    text-align: left;
+    font-weight: 300;
+    font-size: 12px;
+  }
+  .tooltip .tooltip-arrow {
+    border-bottom-color: #ff4c35;
+  }
+}
+
+.popover-menu{font-size:12px;text-transform:none;list-style:none;padding:0;margin:0}
+.popover-menu.filled>li .popover-item:hover{background:#e9f3fa;color:#f48168}
+.popover-menu>li:first-child .popover-item{border-radius:5px 5px 0 0}
+.popover-menu>li:last-child .popover-item{border-bottom:0;border-radius:0 0 5px 5px}
+.popover-menu>li .popover-item{display:block;padding:10px;color:#575d70;border-bottom:1px solid #e8eef3;font-weight:200}
+.popover-menu>li .popover-item .s{font-size:14px}
+.popover-menu>li .popover-item:hover{color:#179bff;text-decoration:none}
+.user-invite-block {
+  margin-bottom:20px;
+}
+
+.user-you {
+  color:#999;
+}
+
+input[type=email].invite-input {
+  width:70%;
+}
+
+.hover-actions {
+  margin-left:10px;
+
+  a {
+    display:inline-block;
+    height:28px;
+    width:28px;
+    text-align:center;
+    line-height:30px;
+    border: 1px solid #E8E8E8;
+    color: #6E6E6E;
+    font-size:14px;
+    background:#fff;
+
+    @include border-radius(15px);
+
+    &:hover {
+      background: #BBBBBB;
+      color: #fff;
+      border-color: #A0A0A0;
+    }
+  }
+}
+
+.save-user {
+  margin-left:10px;
+}
+
+.company-user-block {
+  background:$right-sidebar-bg;
+
+  .block-inner {
+    padding:20px;
+  }
+}
+
+.sidebar-table {
+  width:100%;
+
+  thead {
+    color:$font-color-dark-grey;
+    font-size:13px;
+    font-weight:500;
+  }
+
+  tbody {
+    color:$left-sidebar-font-color-dark;
+    font-size:15px;
+
+    tr {
+      &:hover,
+      &.active {
+        td {
+          background: $right-sidebar-hover-bg;
+        }
+
+        .hidden-el {
+          opacity:1;
+        }
+      }
+    }
+  }
+
+  tr {
+    .hidden-el {
+      opacity:0;
+    }
+
+    td {
+      padding:10px;
+
+      &:first-child {
+        padding-left:20px;
+      }
+
+      &:last-child {
+        padding-right:20px;
+      }
+    }
+  }
+}
+
+.company-user-table {
+  tr {
+    .hidden-el {
+      opacity:0;
+      color: $left-sidebar-font-color-dark;
+      font-size:16px;
+      display:block;
+    }
+
+    .popover.bottom-right {
+      margin-left:15px;
+
+      .arrow {
+        right:10px;
+      }
+    }
+  }
+}
+
+.company-info-block {
+  h1 {
+    line-height:33px;
+    color:$color-dark-grey2;
+    font-weight:900;
+    font-size:26px;
+  }
+
+  .block-inner {
+    padding:20px;
+  }
+
+  .update-link {
+    font-size:14px;
+    color:#AFC5D7;
+    margin-left:5px;
+    .fa {
+      position: relative;
+      top: -3px;
+    }
+  }
+}
+
+.company-create-form {
+  max-width:800px;
+}

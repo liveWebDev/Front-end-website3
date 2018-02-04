@@ -1,0 +1,100 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true" bsModal #contactsForm="bs-modal">
+    <div class="modal-dialog" style="width:480px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+
+                <button type="button" class="close" aria-label="Close" (click)="hideContactForm()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                <h1>{{currentForm?.header}}</h1>
+            </div>
+            <div class="modal-body">
+
+                <form class="form contact-form" (ngSubmit)="updateContact(contactForm?.currentContactId)" novalidate>
+                    <div class="field-row">
+                        <input type="text" class="slim" placeholder="Name" [(ngModel)]="contactForm.name" name="name" required (focus)="clearError('name')">
+                        <span class="required-mark">*</span>
+                        <div>
+                            <div [ngClass]="{visible: !!contactFormErrors?.name}" class="slim-error slide-down-help">{{contactFormErrors?.name}}</div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <input type="text" class="slim" placeholder="Partner's company name" [(ngModel)]="contactForm.companyName" (keyup)="suggestPartners(contactForm.companyName);" name="companyName" (focus)="clearError('partner_id')">
+                        <span class="required-mark">*</span>
+                        <ul *ngIf="!!matches.length" tabindex="-1" class="typeahead dropdown-menu ng-scope am-fade bottom-left" style="top: 41px; left: 5px; display: block; visibility: visible;">
+                            <li *ngFor="let match of matches" role="presentation"
+                                (click)="pickPartner(match.name);"
+                            ><a role="menuitem" tabindex="-1" >{{match.name}}</a></li>
+                        </ul>
+                        <div>
+                            <div [ngClass]="{visible: !!contactFormErrors?.partner_id}" class="slim-error slide-down-help">{{contactFormErrors.partner_id}}</div>
+                        </div>
+                    </div>
+
+                    <div class="field-row">
+                        <input type="text" class="slim" placeholder="Work position" [(ngModel)]="contactForm.position" name="position" required>
+                    </div>
+
+                    <div class="contact-title">
+                        Contacts
+                        <div [ngClass]="{visible: !!contactFormErrors?.value}" class="slim-error slide-down-help">You must fill at least one of contact fields</div>
+                    </div>
+
+                    <div class="field-row" *ngFor="let field of contactForm.emailFields; let i = index">
+                        <i class="fa fa-envelope-o fa-fw"></i>
+
+                        <div class="field-item-place">
+                            <input type="email" class="slim" placeholder="Email"  [(ngModel)]="field.value" name="{{field.name}}" (focus)="clearError(field.name); clearError('value');" (blur)="validateDataField('email', field.name, field.value)">
+                            <span class="required-mark" *ngIf="i < 1">*</span>
+                        </div>
+                        <div [ngClass]="{visible: !!contactFormErrors[field.name]}" class="slim-error slide-down-help">Please, provide a valid email address</div>
+                    </div>
+
+                    <div class="field-row" *ngFor="let field of contactForm.phoneFields; let i = index">
+                        <i class="fa fa-phone fa-fw"></i>
+
+                        <div class="field-item-place">
+                            <div class="field-row">
+                                <div class="fields-plus" style="position: absolute; right: 2px; top: -7px; font-size: 18px;">
+                                    <a *ngIf="i == contactForm.phoneFields.length - 1" (click)="contactForm.incrementPhones(field)" style="top: -7px; right: 3px;"><i class="s s-plus_circle"></i></a>
+                                    <a *ngIf="i && !field.value && !field.id" (click)="contactForm.removePhones(field, i)" style="top: -5.5px; right: 2.5px;"><i class="s s-trash"></i></a>
+                                </div>
+                                <input type="text" class="slim" placeholder="Phone number" name="{{field.name}}" [(ngModel)]="field.value" (focus)="clearError(field.name); clearError('value');" (blur)="validateDataField('phone', field.name, field.value)">
+                            </div>
+                        </div>
+                        <div [ngClass]="{visible: !!contactFormErrors[field.name]}" class="slim-error slide-down-help">Please, provide a valid phone number in format "+XXXXXXXXXXX"</div>
+                    </div>
+
+                    <div class="field-row" *ngFor="let field of contactForm.skypeFields">
+                        <i class="fa fa-skype fa-fw"></i>
+                        <div class="field-item-place">
+                            <input type="text" class="slim" placeholder="Skype username" name="{{field.name}}" [(ngModel)]="field.value" (focus)="clearError(field.name); clearError('value');" (blur)="validateDataField('skype', field.name, field.value)">
+                        </div>
+                        <div [ngClass]="{visible: !!contactFormErrors[field.name]}" class="slim-error slide-down-help">Please, provide a valid skype name</div>
+                    </div>
+
+                    <div class="field-row" *ngFor="let field of contactForm.facebookFields">
+                        <i class="fa fa-facebook fa-fw"></i>
+
+                        <div class="field-item-place">
+                            <input type="text" class="slim" placeholder="Account in facebook" name="{{field.name}}" [(ngModel)]="field.value" (focus)="clearError(field.name); clearError('value');" (blur)="validateDataField('facebook', field.name, field.value)">
+                        </div>
+                        <div [ngClass]="{visible: !!contactFormErrors[field.name]}" class="slim-error slide-down-help">Please, provide a valid web address in format "https://facebook.com/your-address"</div>
+                    </div>
+
+                    <div class="field-row" *ngFor="let field of contactForm.linkedinFields">
+                        <i class="fa fa-linkedin fa-fw"></i>
+
+                        <div class="field-item-place">
+                            <input type="text" class="slim" placeholder="Linkedin profile" name="{{field.name}}" [(ngModel)]="field.value" (focus)="clearError(field.name);clearError('value');" (blur)="validateDataField('linkedin', field.name, field.value)">
+                        </div>
+                        <div class="slim-error slide-down-help" [ngClass]="{visible: !!contactFormErrors[field.name]}">Please, provide a valid linkedin account address in format "https://linkedin.com/in/your-address"</div>
+                    </div>
+
+                    <div class="field-row">
+                        <button class="btn">{{ currentForm?.header }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

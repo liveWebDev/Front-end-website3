@@ -1,0 +1,38 @@
+<div class="deal-list" ng-show="isDataLoaded">
+  <div class="deal-item deal-list-head">
+    <div class="deal-advance">
+      <div class="deal-date">Last activity</div>
+    </div>
+
+    Partner + Deal name
+  </div>
+  <div class="deal-item" ng-repeat="deal in deals" deal-color="{{ deal.dayCounter }}" ng-click="viewDeal(deal.id)">
+    <a href="/deal/{{deal.id}}" class="deal-link">
+      <div class="deal-advance">
+
+            <span class="deal-owner" ng-if="!userId">
+              {{ deal.owner }}
+            </span>
+            <span class="deal-date" ng-if="deal.date == '1970-01-01T00:00:00.000Z'">
+              <span class="date-label">{{ 'Back from postpone' }}</span>
+            </span>
+            <span class="deal-date" ng-if="deal.date != '1970-01-01T00:00:00.000Z' && !deal.timer">
+              <span class="date-label">{{ deal.date | timeAgo }}</span>
+            </span>
+
+            <div class="deal-date" ng-if="deal.date != '1970-01-01T00:00:00.000Z' && !!deal.timer">
+              <span class="deal-timer">
+                <span class="deal-timer-progress" style="width: {{ deal.timerProgress }}%"></span>
+                <span class="deal-timer-text" ng-if="deal.dayToActive == 1">{{ deal.dayToActive }} day left</span>
+                <span class="deal-timer-text" ng-if="deal.dayToActive != 1">{{ deal.dayToActive }} days left</span>
+              </span>
+            </div>
+      </div>
+
+      <div ng-click="viewDeal(deal.id)" class="deal-title">
+        {{deal.partner_name }} +
+        <span class="deal-name">{{ deal.title  | cut:true:55 }}</span>
+      </div>
+    </a>
+  </div>
+</div>

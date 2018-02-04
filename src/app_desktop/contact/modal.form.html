@@ -1,0 +1,102 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:480px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1>{{ formTitle }}</h1>
+      </div>
+      <div class="modal-body">
+
+        <form name="form.contactForm" class="form contact-form" ng-submit="submitForm()" novalidate>
+          <div class="field-row">
+            <input type="text" class="slim" placeholder="Name" name="name" ng-model="item.name"
+                   tooltip-validate error-data="errorData.name"
+                   autocomplete="off"
+                   required>
+            <div ng-messages="contactForm.name.$error" ng-if="contactForm.name.$dirty || contactForm.$submitted">
+              <div ng-message="required" class="slim-error slide-down-help">It's required field</div>
+            </div>
+          </div>
+
+          <div class="field-row" ng-if="noPartner">
+            <input
+              type="text"
+              class="slim"
+              placeholder="Partner's company name"
+              name="partner"
+              ng-model="item.partner"
+              bs-options="partner as partner.name for partner in searchPartner($viewValue)"
+              data-min-length="2"
+              bs-typeahead
+              tooltip-validate error-data="errorData.partner"
+              onfocus="angular.element(this).attr('autocomplete', 'off')"
+              required
+              >
+
+            <div ng-messages="contactForm.partner.$error" ng-if="contactForm.partner.$dirty || contactForm.$submitted">
+              <div ng-message="required" class="slim-error slide-down-help">It's required field</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <input type="text" class="slim" placeholder="Work position" name="position" ng-model="item.position">
+          </div>
+
+          <div class="contact-title">
+            Contacts
+
+            <div ng-show="emptyContacts" class="slim-error slide-down-help">You must fill at least one of contact fields</div>
+          </div>
+
+          <div class="field-row" ng-repeat="field in item.fields.email">
+            <i class="fa fa-envelope-o fa-fw"></i>
+
+            <div class="field-item-place">
+              <input type="email" class="slim" placeholder="Email" name="item[email][]" ng-model="field.value">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <i class="fa fa-phone fa-fw"></i>
+
+            <div class="field-item-place">
+              <div class="field-row" ng-repeat="field in item.fields.phone">
+                <a ng-if="$last" class="field-plus" ng-click="increment(item.fields.phone)"><i class="s s-plus_circle"></i></a>
+                <input type="text" class="slim" placeholder="Phone number" name="item[phone][]" ng-model="field.value">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <i class="fa fa-skype fa-fw"></i>
+            <div class="field-item-place">
+              <input type="text" class="slim" placeholder="Skype username" name="item[skype][]" ng-model="item.fields.skype[0].value">
+            </div>
+          </div>
+
+
+          <div class="field-row">
+            <i class="fa fa-facebook fa-fw"></i>
+
+            <div class="field-item-place">
+              <input type="text" class="slim" placeholder="Account in facebook" name="item[facebook][]" ng-model="item.fields.facebook[0].value">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <i class="fa fa-linkedin fa-fw"></i>
+
+            <div class="field-item-place">
+              <input type="text" class="slim" placeholder="Linkedin profile" name="item[linkedin][]" ng-model="item.fields.linkedin[0].value">
+            </div>
+          </div>
+
+          <div class="field-row">
+            <button class="btn" item="button" load-button ng-if="button">{{ formTitle }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

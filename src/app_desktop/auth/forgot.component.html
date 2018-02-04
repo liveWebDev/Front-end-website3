@@ -1,0 +1,68 @@
+<div class="no-auth-wrapper">
+    <div class="wrapper-with-image" perfect-scrollbar>
+        <div class="content-wrapper">
+            <landing-dudes></landing-dudes>
+            <div class="content-block block block-wide" id="content-block">
+                <div class="landing-text">
+                    <div class="no-auth-logo"><i class="s s-logo"></i></div>
+                    {{ common.title }}
+                </div>
+                <div class="landing">
+                    <div [hidden]="sent">
+                        <form name="forgetForm" (ngSubmit)="forgetForm.form.valid && submit($event, email.value)" #forgetForm="ngForm" novalidate>
+                            <div class="form">
+                                <div class="field-row form-title">
+                                    Forgot your password?
+                                </div>
+
+                                <div class="field-row">
+                                    Enter your email and we'll send you instruction how to restore your password
+                                </div>
+
+                                <div class="field-row">
+                                    <input type="email" placeholder="Please, enter your email" class="form-control" name="email" [(ngModel)]="forgetForm.email"  #email="ngModel"  pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$" required validate-onblur />
+                                    <div *ngIf="!email.valid && (email.dirty || email.touched) || (email.untouched && submitAttempt)">
+                                        <div [hidden]="!email.errors.required" class="form-help-error slide-down-help">
+                                            Email is required field
+                                        </div>
+                                        <div [hidden]="!email.errors.pattern" class="form-help-error slide-down-help">
+                                            Email is invalid
+                                        </div>
+                                        <div [hidden]="!email.errors.validateEmail" class="form-help-error slide-down-help">
+                                            Wrong email
+                                        </div>
+                                    </div>
+                                    <div *ngIf="errorMsg">
+                                        <div class="form-help-error slide-down-help">{{ errorMsg }}</div>
+                                    </div>
+                                </div>
+
+                                <input type="submit" style="display:none">
+                                <div class="field-row">
+                                    <button type="submit" class="btn btn-block landing-btn" (click)="forgetForm.form.valid && submit($event, email.value);">Reset password</button>
+                                    <div class="under-button-links">
+                                        <a [routerLink]="['/']" class="forgot-password">I've remembered it</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div [hidden]="!sent">
+                        <div class="form">
+
+                            <div class="field-row">
+                                Instructions how to restore password was successfully sent you in {{ emailAddress }}
+                            </div>
+
+                            <div class="field-row">
+                                <a class="btn btn-block landing-btn" [routerLink]="['/']">Ok</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

@@ -1,0 +1,86 @@
+<div class="header">
+  <a ng-click="back()" class="back-link"><i class="s s-back"></i></a>
+  <div class="right-links">
+    <a ui-sref="logout" ng-if="isMe"><i class="s s-inline s-login"></i> Log out</a>
+  </div>
+  <h1 ng-click="back()" class="clickable">
+    {{ pageTitle }}
+  </h1>
+</div>
+<div class="block-inner user-profile clearfix">
+  <div class="user-photo">
+    <div class="user-photo-container">
+      <div class="avatar-loader" ng-show="isUploadingInProcess">
+        <div class="loader-gear">
+          <i class="fa fa-cog fa-spin"></i>
+        </div>
+      </div>
+      <img src="{{ user.ava_160 }}">
+    </div>
+
+    <ul class="avatar-options" ng-if="isMe">
+      <li>
+        <label class="upload-avatar-label">
+          <span>Change photo</span>
+          <input type="file" nv-file-select uploader="uploader">
+        </label>
+      </li>
+      <!--<li><a>Delete photo</a></li>-->
+    </ul>
+  </div>
+
+  <div class="user-info-block">
+    <div class="user-name">
+      {{ user.name }}
+      <a ui-sref="main.one_column.user_update" class="update-link" ng-if="isMe"><i class="s s-inline s-edit"></i></a>
+    </div>
+
+    <div class="contact-list profile-view">
+      <div class="contact-item">
+        <div class="contact-head-title">
+          Contacts
+        </div>
+
+        <div class="contact-field" ng-repeat="(field,fieldName) in contactFields" ng-class="field" ng-if="user[field]">
+          <div class="contact-field-name">
+            <span class="icon fa"></span>
+            {{ fieldName }}
+          </div>
+          <div class="contact-field-value">
+            {{ user[field] }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="block-inner">
+  <div class="section-title">Activity log</div>
+  <div class="activity-list">
+    <div class="activity-item" ng-repeat="item in user.last">
+      <div class="activity-item-date">
+        {{item.created_at | timeAgo}}
+      </div>
+
+      <div class="activity-item-title">
+        <span class="system-descr" ng-if="item.post_type == 0" ng-switch on="item.systemMessage.action">
+          <span ng-switch-when="update"> Updated deal </span>
+          <span ng-switch-when="init"> Created new deal </span>
+          <span ng-switch-when="postpone"> Postponed deal </span>
+          <span ng-switch-when="close"> Closed deal </span>
+          <span ng-switch-when="reassign"> Reassigned deal </span>
+          <span ng-switch-when="restore"> Restored deal </span>
+          <span ng-switch-when="link"> Linked deal </span>
+          <span ng-switch-when="unlink"> Unlinked deal </span>
+        </span>
+
+        <span ng-if="item.post_type == 2">Left comment at </span>
+        <span ng-if="item.post_type == 1">Sent new email at</span>
+
+        <a ui-sref="main.two_column.deal_view({id: item.deal_id})">{{item.name + ' | ' + item.title}}</a>
+      </div>
+    </div>
+  </div>
+</div>

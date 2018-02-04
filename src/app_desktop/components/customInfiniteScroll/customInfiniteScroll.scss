@@ -1,0 +1,16 @@
+.infinite-loader {
+  height:30px;
+  text-align:center;
+  padding-top:30px;
+  box-sizing: content-box;
+
+  .loader-inner {
+    margin-top:-22px;
+  }
+}
+
+.infinite-loader-error {
+  padding:15px 15px 15px 30px;
+  display:none;
+}
+

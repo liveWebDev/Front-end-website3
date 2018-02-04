@@ -1,0 +1,66 @@
+/**
+ * Created by adrian on 6/11/17.
+ */
+<div class="header">
+    <h1>
+        <a class="company-title" ui-sref="main.one_column.deal_index">
+            {{currentCompany?.title | slice:0:30}}
+            <i class="s s-arrow_right"></i>
+        </a>
+        info
+    </h1>
+</div>
+
+<div class="left-wide-block company-user-block">
+    <div class="block-inner">
+        <div class="new-letter" style="float: right; margin-top: -2px;">
+            <div><a ng-click="showInviteUserModal()" class="btn" style="display: inline-block; background: #10d4c6; color: #fff; border: 1px solid #1fbab5; padding: 0 15px; cursor: pointer; height: 33px; line-height: 33px; border-radius: 3px;">Send invite</a></div>
+        </div>
+
+        <div class="search-block search-company-user-block" style="margin: 2px 130px 0 0; position: relative;">
+            <input type="text" class="search-input" placeholder="Search user by name" ng-model="searchText" style="border: 1px solid #cfd8de; background: #fff; height: 30px; padding: 0 15px; border-radius: 16px;">
+            <button class="search-button" style="position: absolute; right: 7px; top: 2px; background: 0 0; border: 0; color: #b0b3c0;"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="deals-loader" [hidden]="!isDataLoaded">
+        <div class="loader-inner">
+            <i class="fa fa-cog fa-3x fa-spin"></i>
+            <br/>loading...
+        </div>
+    </div>
+
+    <table cellpadding="0" cellspacing="0" class="sidebar-table company-user-table" [hidden]="isDataLoaded">
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td width="90">Status</td>
+                <td width="20"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let companyUser of users">
+                <td>
+                    <b>{{ companyUser?.username }}</b>
+                    <span class="user-you" *ngIf="companyUser?.user_id == user?.id">(you)</span>
+                </td>
+                <td>
+                    {{ roles[companyUser.role - 1] }}
+                </td>
+
+                <td>
+                    <div company-user="companyUser" remove-callback="excludeUser" *ngIf="companyUser?.role > 1 && userRole < 3"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="right-short-block company-info-block">
+    <div class="block-inner">
+        <h1> {{ currentCompany?.title }} <a class="update-link" ng-click="updateCompany()"><i class="fa fa-pencil-square-o"></i></a></h1>
+        <div class="subtitle">Description</div>
+        {{ currentCompany?.description }}
+    </div>
+</div>
+

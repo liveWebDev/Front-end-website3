@@ -1,0 +1,65 @@
+<div class="header">
+  <h1>
+    {{ email }}
+    <a ui-sref="main.one_column.inbox_settings({email: email})" class="info-link"><i class="s s-info"></i> Info</a>
+  </h1>
+</div>
+<div class="inbox-list-block">
+  <div class="inbox-list-header">
+    <div class="block-inner">
+      <div class="new-letter">
+        <a ui-sref="main.inbox.list.create({email: email})" class="btn" ng-class="{disabled: current.action == 'create'}">New message</a>
+      </div>
+      <div class="tabs">
+        <a ng-class="{active: current.tab == 'inbox'}" ng-click="changeTab('inbox')"><span>Inbox</span></a>
+        <a ng-class="{active: current.tab == 'sent'}" ng-click="changeTab('sent')"><span>Sent</span></a>
+        <a ng-class="{active: current.tab == 'trash'}" ng-click="changeTab('trash')"><span>Trash</span></a>
+      </div>
+    </div>
+
+    <form name="inboxSearchForm" ng-submit="searchInbox(true)">
+      <div class="search-block search-inbox-block">
+        <input type="text" class="search-input" placeholder="Search" ng-model="searchText" ng-keyup="leaveSearch();" autocomplete="off">
+        <button class="search-button"><i class="fa fa-search"></i></button>
+      </div>
+    </form>
+  </div>
+
+  <div class="deals-loader" ng-hide="current.loaded">
+    <div class="loader-inner">
+      <i class="fa fa-cog fa-3x fa-spin"></i>
+      <br/>loading...
+    </div>
+  </div>
+
+  <div class="letter-list" ng-show="current.loaded" perfect-scrollbar data-suppress-scroll-x="true" custom-infinite-scroll item="inboxScroller">
+
+    <div class="letter-item simple-item" ng-class="{active: current.id == message.thread_id}" ng-repeat="message in threads | orderBy:'-date'" ng-click="showMessage(message)">
+      <div class="letter-deal" ng-if="current.tab != 'trash'">
+        <deal-linker thread-id="message.thread_id" promise="promise" deal="message.deal"></deal-linker>
+      </div>
+
+      <div class="letter-unread" ng-if="message.unread"></div>
+      <div class="letter-author" ng-if="type != 'sent'">{{ message.from | emailSender}} <span class="letter-length">{{ message.list.length > 1 ? '(' + message.list.length + ')' : ''}}</span></div>
+      <div class="letter-author" ng-if="type == 'sent'">{{ message.to | emailSender}} <span class="letter-length">{{ message.list.length > 1 ? '(' + message.list.length + ')' : ''}}</span></div>
+
+      <a class="letter-subject">{{ message.subject || 'No subject' }}</a>
+
+      <div class="letter-preview" ng-bind-html="message.snippet"></div>
+
+      <div class="letter-date">
+        <span ng-if="today == (message.date | date : 'yyyy-MM-dd')">{{message.date | date : 'HH:mm'}}</span>
+        <span ng-if="today != (message.date | date : 'yyyy-MM-dd')">{{message.date | date : 'MMM d'}}</span>
+      </div>
+    </div>
+
+    <div class="inbox-search-info" ng-if="inSearch && !threads.length">
+      Nothing found
+    </div>
+
+  </div>
+</div>
+
+<div class="inbox-more-block" style="overflow-y: scroll" data-scroll-top-on-change="current.id" id="thread_view">
+  <div class="inbox-right-content" id="inbox-right-content" ui-view></div>
+</div>

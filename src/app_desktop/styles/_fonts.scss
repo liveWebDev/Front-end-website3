@@ -1,0 +1,178 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,200,500,600);
+
+@font-face {
+  font-family: "symbols";
+  src: url('../assets/fonts/symbols/symbols.eot');
+  src: url('../assets/fonts/symbols/symbols.eot?#iefix') format('eot'),
+  url('../assets/fonts/symbols/symbols.woff') format('woff'),
+  url('../assets/fonts/symbols/symbols.ttf') format('truetype'),
+  url('../assets/fonts/symbols/symbols.svg#symbols') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+//DejaVu sans mono
+@font-face {
+  font-family: "DejaVuSansMono";
+  src: url('../assets/fonts/dejavu/DejaVuSansMono-webfont.woff') format('woff'),
+  url('../assets/fonts/dejavu/DejaVuSansMono-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DejaVuSansMono";
+  src: url('../assets/fonts/dejavu/DejaVuSansMono-Bold-webfont.woff') format('woff'),
+  url('../assets/fonts/dejavu/DejaVuSansMono-Bold-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DejaVuSansMono";
+  src: url('../assets/fonts/dejavu/DejaVuSansMono-Oblique-webfont.woff') format('woff'),
+  url('../assets/fonts/dejavu/DejaVuSansMono-Oblique-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "DejaVuSansMono";
+  src: url('../assets/fonts/dejavu/DejaVuSansMono-BoldOblique-webfont.woff') format('woff'),
+  url('../assets/fonts/dejavu/DejaVuSansMono-BoldOblique-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+// menlo font
+@font-face {
+  font-family: "Menlo";
+  src: url('../assets/fonts/menlo/Menlo-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Helvetica font
+@font-face {
+  font-family: "Helvetica";
+  src: url('../assets/fonts/helvetica/HelveticaRegular.eot');
+  src: url('../assets/fonts/helvetica/HelveticaRegular.eot?#iefix') format('eot'),
+  url('../assets/fonts/helvetica/HelveticaRegular.woff') format('woff'),
+  url('../assets/fonts/helvetica/HelveticaRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Lucida Grande font
+@font-face {
+  font-family: "LucidaGrande";
+  src: url('../assets/fonts/lucidagrande/LucidaGrande.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LucidaGrande";
+  src: url('../assets/fonts/lucidagrande/LucidaGrandeBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+.s {
+  display: inline-block;
+  font: normal normal normal 14px/1 "symbols";
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translate(0, 0);
+  margin-top: 0px;
+  vertical-align: middle;
+}
+
+html[data-useragent*='Mac OS X'],
+html[data-useragent*='Mac OS X 10_10'] {
+  .s {
+    line-height: inherit;
+  }
+
+  .small-link-button {
+    .s {
+      line-height:1.2;
+    }
+  }
+
+  .big-deal-link {
+    .s {
+      line-height:20px;
+    }
+  }
+
+  .header {
+    .back-link .s {
+      line-height:33px;
+    }
+
+    h1 .company-title .s-arrow_right {
+      line-height:33px;
+    }
+  }
+
+  .deal-view .deal-subinfo .subinfo-row .s {
+    line-height:0.8em;
+  }
+}
+
+.s-inline {
+  line-height: 1.5em;
+}
+
+.s:before {
+
+}
+
+.s-lg {
+  font-size: 1.3333333333333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+.s-2x { font-size: 2em; }
+.s-3x { font-size: 3em; }
+.s-4x { font-size: 4em; }
+.s-5x { font-size: 5em; }
+.s-fw {
+  width: 1.2857142857142858em;
+  text-align: center;
+}
+.s-arrow_diag:before { content: "\E001" }
+.s-arrow_right:before { content: "\E002" }
+.s-back:before { content: "\E003" }
+.s-book:before { content: "\E004" }
+.s-chevron_down:before { content: "\E005" }
+.s-comment:before { content: "\E006" }
+.s-contract:before { content: "\E007" }
+.s-email:before { content: "\E008" }
+.s-gear:before { content: "\E009" }
+.s-edit:before { content: "\E00A" }
+.s-fuck:before { content: "\E00B" }
+.s-glyph19:before { content: "\E00C" }
+.s-crown:before { content: "\E00D" }
+.s-glyph20:before { content: "\E00E" }
+.s-glyph27:before { content: "\E00F" }
+.s-glyph32:before { content: "\E010" }
+.s-info:before { content: "\E011" }
+.s-link:before { content: "\E012" }
+.s-login:before { content: "\E013" }
+.s-link_hor:before { content: "\E014" }
+.s-logo:before { content: "\E015" }
+.s-phone:before { content: "\E016" }
+.s-plus_circle:before { content: "\E017" }
+.s-print:before { content: "\E018" }
+.s-reply:before { content: "\E019" }
+.s-reply_all:before { content: "\E01A" }
+.s-share:before { content: "\E01B" }
+.s-stats:before { content: "\E01C" }
+.s-time:before { content: "\E01D" }
+.s-trash:before { content: "\E01E" }
+.s-user:before { content: "\E01F" }
+.s-user2:before { content: "\E020" }

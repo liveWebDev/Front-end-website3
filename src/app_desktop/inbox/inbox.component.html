@@ -1,0 +1,164 @@
+<div class="header">
+    <h1>
+        {{ currentEmail?.email_address }}
+        <a routerLink="/main/inbox/{{currentEmail?.id}}/info" class="info-link"><i class="s s-info"></i> Info</a>
+        <a class="info-link" (click)="refreshMailList($event)"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</a>
+    </h1>
+</div>
+<div class="inbox-list-block" style="max-height: 100%;">
+    <div class="inbox-list-header" style="padding-bottom: 15px;">
+        <div class="block-inner" style="min-height: 63px;">
+            <div class="new-letter">
+                <a (click)="createNewEmail()" class="btn {{createEmailComponent.currentAction === 'create' ? 'disabled' : ''}}">New message</a>
+            </div>
+            <div class="tabs">
+                <a class="active" (click)="consoleLog(filterFolders.folders[this.currentTabIndex])"><span>{{(filterFolders && currentTabIndex >= 0) ? filterFolders.representation[currentTabIndex] : 'All mail'}}</span></a>
+            </div>
+        </div>
+        <div class="search-block search-inbox-block">
+            <input type="text" class="search-input" placeholder="Search" #searchBox (keyup.enter)="search(searchBox.value)">
+            <button class="search-button" (click)="search(searchBox.value)"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="deals-loader" [hidden]="!inSearch" style="text-align: center;" *ngIf="!emailsSummary.length">
+        <div class="loader-inner">
+            <i class="fa fa-cog fa-3x fa-spin"></i>
+            <br/>loading...
+        </div>
+    </div>
+
+    <perfect-scrollbar class="letter-list" [hidden]="!emailsSummary" (ps-y-reach-end)="loadMore()" [config]="config" style="max-height: calc(100% - 113px);">
+
+        <div class="letter-item simple-item" [ngClass]="{active: thread?.slag == selectedThread?.slag}" *ngFor="let thread of emailsSummary " (click)="showMessage(thread)">
+            <div class="letter-deal">
+                <span class="attachment-mark" [hidden]="!thread?.emails[0].attachments"><i class="fa fa-paperclip"></i></span>
+                <a class="link-button small-link-button ng-binding" (click)="linkDealForm($event, thread)" *ngIf="!thread?.deals.length">Link the deal</a>
+            </div>
+
+            <div class="letter-unread" *ngIf="!thread?.emails[0].seen"></div>
+
+            <div class="letter-author">
+                {{ [thread?.emails[0].from, thread?.emails[0].to] | GetCounteragentEmail: currentEmail?.email_address | ExtractName }}
+                <span class="letter-length">{{ thread?.emails.length > 1 ? '(' + thread?.emails.length + ')' : ''}}</span>
+            </div>
+
+            <a class="letter-subject" style="max-width: 88%; display: block;">{{ thread?.emails[0].subject | slice:0:45 || 'No subject' }}{{ thread?.emails[0].subject.length > 45 ? '...' : '' }}</a>
+
+            <span class="letter-content-brief" style="max-width: 88%; display: block; max-height: 34px; min-height: 34px; overflow: hidden; text-overflow: ellipsis;">
+                <span *ngIf="thread.emails[0].content_brief">{{ thread.emails[0].content_brief | slice:0:75 }}...</span>
+            </span>
+
+            <div class="letter-date">
+                <span *ngIf="(today | date : 'yyyy-MM-dd') == (thread?.emails[0].date | date : 'yyyy-MM-dd')">{{thread?.emails[0].date | date : 'HH:mm'}}</span>
+                <span *ngIf="(today | date : 'yyyy-MM-dd') != (thread?.emails[0].date | date : 'yyyy-MM-dd')">{{thread?.emails[0].date | date : 'd MMM yyyy'}}</span>
+            </div>
+        </div>
+
+        <div class="inbox-search-info" *ngIf="!inSearch && !emailsSummary.length">
+            Nothing found
+        </div>
+    </perfect-scrollbar>
+
+</div>
+
+<div class="inbox-more-block" style="overflow-y: scroll">
+    <div class="inbox-right-content" [hidden]="currentEmailCreatorState !== 'create'">
+        <create-new-email #createEmailComponent [thread]="thread"></create-new-email>
+    </div>
+
+        <!--inbox view block-->
+    <div class="inbox-right-content">
+
+        <div class="deals-loader" [hidden]="!loadingThread" style="text-align: center;">
+            <div class="loader-inner">
+                <i class="fa fa-cog fa-3x fa-spin"></i>
+                <br/>loading...
+            </div>
+        </div>
+
+        <div class="inbox-view" [hidden]="!thread?.length">
+            <div class="right-links">
+                <!--<a title="Restore thread" (click)="restoreThread()"><i class="fa fa-history"></i></a>-->
+            </div>
+
+            <div class="inbox-title" *ngIf="!selectedThread?.deals.length">
+                <div>
+                    <a class="big-deal-link link-button" (click)="linkDealForm($event, selectedThread)">
+                        <span></span> Link the deal<br><i class="s s-link_hor"></i>
+                    </a>
+                </div>
+                <br>
+                {{thread ? thread[0]?.mail.subject : 'No subject' }}
+            </div>
+
+            <!--Email form-->
+
+            <div>
+                <create-new-email #createEmailComponentInner [thread]="thread"></create-new-email>
+            </div>
+
+            <!--end email form-->
+
+            <div class="comment-list">
+
+                <div class="comment-item" *ngFor="let message of thread; let i = index" style="position: relative;">
+                    <div class="right-links" style="top: 20px; right: 20px;">
+                        <a title="Delete {{message.folder}}" (click)="deleteLetter(message.mail.id, message.folder, message.timestamp)"><i class="fa fa-trash"></i></a>
+                    </div>
+                    <div class="comment-photo">
+                        <div class="comment-index">#{{i}}</div>
+
+                        <a href="#" class="photo"><i class="fa fa-user"></i></a>
+                    </div>
+
+                    <div class="comment-content">
+
+                        <a class="email-reply" *ngIf="email != message.rawFrom">
+                            <!--data-template="app_desktop/inbox/reply.popover.html"-->
+                            <i class="fa fa-reply"></i>
+                        </a>
+
+                        <div class="comment-date">
+                            {{ message.mail.date }}
+                        </div>
+
+                        <div class="comment-author">
+                            <span>{{ message.mail.fromName }} {{ message.mail.fromAddress }}</span>
+                        </div>
+
+                        <div class="comment-cc">
+                            <span class="comment-cc-title">To:</span>
+                            <span class="recepient">{{message.mail.toString}}</span>
+                        </div>
+
+                        <div class="letter-view" *ngIf="message.mail.textHtml">
+                            <email-html-view [htmlString]="message.mail.textHtml"></email-html-view>
+                        </div>
+
+                        <div class="letter-view letter-text-view" *ngIf="!message.mail.textHtml">
+                            {{message.mail.textPlain}}
+                        </div>
+
+                        <div class="inbox-attaches" *ngIf="(message.attachments | json).length > 4">
+                            <div class="attach-title">
+                                Attachments
+                            </div>
+
+                            <div class="attach-list">
+                                <div class="attach-item" *ngFor="let attach of message.attachments | keys">
+                                    <span class="attach-item-title">{{ attach.value.name }}</span>
+                                    <a href="{{ attach.value.downloadUrl }}" target="_blank" class="attach-download">Download</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<inbox-deal-linker #inboxDealLinkerComponent></inbox-deal-linker>
+<google-auth #googleAuthComponent></google-auth>

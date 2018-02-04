@@ -1,0 +1,37 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:470px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1>Change profile picture</h1>
+      </div>
+      <div class="modal-body">
+
+        <form name="contactForm" class="form contact-form" ng-submit="submit()" novalidate>
+          <!--<div class="field-row">
+            <input type="text" class="slim" placeholder="Put link to your picture here" name="url" ng-model="url" required>
+          </div>-->
+
+          <div class="field-row">
+            <!--or-->
+            <label class="upload-avatar-label">
+              <span>upload picture</span>
+              <input type="file" nv-file-select uploader="uploader">
+            </label>
+          </div>
+
+          <div class="upload-list" ng-if="uploadedPicture.filename">
+            <div class="upload-item am-fade-and-slide-top">
+              <span class="upload-item-name">{{ uploadedPicture.filename }}</span>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <button class="btn">Change picture</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

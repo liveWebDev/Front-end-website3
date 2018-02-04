@@ -1,0 +1,43 @@
+<div class="modal feasy-modal top am-fade-and-scale" tabindex="-1" role="dialog" aria-hidden="true" bsModal #signatureEditorModal="bs-modal">
+    <div class="modal-dialog" style="width:800px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="signatureEditorModal.hide()">
+                    <span aria-hidden="true">×</span> <span class="close-title">Close</span>
+                </button>
+                <h1 class="deal-link-title">
+                    <span>Signatures</span>
+                </h1>
+            </div>
+            <div class="modal-body" style="display: flex; justify-content: space-between; max-height: 400px;">
+                <div class="list-container" style="width: 30%;">
+                    <perfect-scrollbar class="emails-list" [config]="config" style="max-height: 100%; overflow: hidden;">
+                        <div class="email-item" *ngFor="let item of emailsList" [ngClass]="{active: item.id === currentEmailId}" (click)="loadSignatureList(item.id)">
+                            <p><strong>{{item.email_address}}</strong></p>
+                            <p>{{item.count}} signature{{item.count != 1 ? 's' : ''}}</p>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+
+                <div class="list-container">
+                    <perfect-scrollbar class="signature-list" [config]="config" style="max-height: 100%; overflow: hidden;">
+                        <p class="signature-item" *ngFor="let item of signatureList" [ngClass]="{active: item.id === currentSignature.id}" (click)="selectSignature(item)">{{item.name ? item.name : 'Unnamed'}}</p>
+                    </perfect-scrollbar>
+
+                    <div class="controls" style="padding: 10px 0;">
+                        <button class="controls-btn" (click)="addSignature()">+</button>
+                        <button class="controls-btn" (click)="removeSignature()">-</button>
+                    </div>
+                </div>
+
+                <div class="list-container">
+                    <form>
+                        <input type="text" style="margin-bottom: 10px;" [(ngModel)]="currentSignature.name" name="name">
+                        <textarea id="" cols="30" rows="10" style="margin-bottom: 10px;" [(ngModel)]="currentSignature.text" name="text"></textarea>
+                        <button class="btn" (click)="updateSignature()" [ngClass]="{disabled: !currentSignature.id}">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<form name="commentForm.internal" novalidate>
+  <textarea placeholder="What's new about the deal?" id="internal-comment-content" ng-class="{active: newComment.body.length}" ng-model="newComment.body" name="comment" required></textarea>
+</form>
+
+<div class="submit-row am-fade-and-slide-top" ng-show="newComment.body.length">
+  <button class="btn" load-button item="commentButton" id="submit-internal" ng-if="commentButton">Add a new comment</button>
+</div>

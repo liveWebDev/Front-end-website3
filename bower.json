@@ -1,0 +1,39 @@
+{
+  "name": "feasy",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "angular-resource": "~1.3.4",
+    "angular-route": "~1.3.4",
+    "bootstrap-sass-official": "~3.3.1",
+    "angular-strap": "2.3.1",
+    "angular": "~1.3.4",
+    "angular-ui-router": "~0.2.13",
+    "angular-animate": "~1.3.13",
+    "angular-messages": "~1.3.13",
+    "angular-timeago": "~0.2.0",
+    "angular-sanitize": "~1.3.15",
+    "font-awesome": "~4.3.0",
+    "malihu-custom-scrollbar-plugin": "~3.0.8",
+    "ngtoast": "~1.5.2",
+    "angular-motion": "~0.3.4",
+    "angular-file-upload": "~1.1.5",
+    "angular-perfect-scrollbar": "~0.0.4",
+    "underscore": "~1.8.3",
+    "angular-underscore-module": "~1.0.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.3.4"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1",
+    "angular": "~1.3.4"
+  },
+  "overrides": {
+    "font-awesome": {
+      "main": [
+        "./fonts/*"
+      ]
+    }
+  }
+}

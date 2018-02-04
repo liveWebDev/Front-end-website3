@@ -1,0 +1,263 @@
+
+<div class="header deal-view-header">
+
+  <h1 class="deal-title" style="font-size: 20px;">
+    <a class="company-title" routerLink="/main/deal">
+      <span>{{companyName | slice:0:30}}</span>
+      <i class="s s-arrow_right"></i>
+    </a>
+    {{ dealPartnerName }} + {{ dealTitle | slice:0:35 }}
+    <a class="edit" (click)="showDealEditModal()">
+      <i class="s s-edit"></i>
+    </a>
+  </h1>
+  <div class="deal-status btn-selector-list" [ngSwitch]="dealStatus">
+    <span class="selector-label">Deal status:</span>
+
+    <span class="deal-status-buttons" *ngSwitchCase="1">
+      <span class="btn btn-green">Active</span>
+      <a class="btn btn-outline" *ngIf="canChangeStatus" [popover]="dealPostponePopover">
+        Postpone
+      </a>
+      <a class="btn btn-outline" *ngIf="canChangeStatus" [popover]="dealCloseConfirmationPopover" >
+        Close
+      </a>
+    </span>
+
+    <span class="deal-status-buttons" *ngSwitchCase="2">
+      <a class="btn btn-outline" *ngIf="canChangeStatus" (click)="changeStatus(1, false)">Active</a>
+      <span class="btn btn-yellow">Postponed</span>
+      <a class="btn btn-outline" *ngIf="canChangeStatus" [popover]="dealCloseConfirmationPopover" >Close</a>
+    </span>
+
+
+    <span class="deal-status-buttons" *ngSwitchCase="3">
+      <a class="btn btn-outline" *ngIf="canChangeStatus" (click)="changeStatus(1, false)">Active</a>
+      <span class="btn btn-red">Closed</span>
+    </span>
+
+    <popover-content #dealPostponePopover placement="bottom" [closeOnClickOutside]="true">
+      <datepicker class="datepicker" [(ngModel)]="dt" [showWeeks]="false" [minDate]="minDate" (ngModelChange)="setPostponeDate($event)"></datepicker>
+      <a (click)="changeStatus(2, true)" class="btn btn-block disabled" [ngClass]="{'disabled' : !postponeDate}">
+        <i class="fa fa-clock-o"></i> Postpone it!
+      </a>
+    </popover-content>
+    <popover-content #dealCloseConfirmationPopover placement="bottom" [closeOnClickOutside]="true">
+      <div class="sure-text" style="width: 210px;">Are you sure?</div>
+      <a (click)="changeStatus(3, false)" class="btn btn-block">Close it!</a>
+    </popover-content>
+  </div>
+
+</div>
+
+<div class="content deal-view-content" style="overflow-y: scroll">
+  <div class="block block-clear">
+
+    <div class="deals-loader" [hidden]="isDataLoaded">
+      <div class="loader-inner">
+        <i class="fa fa-cog fa-3x fa-spin"></i>
+        <br/>loading...
+      </div>
+    </div>
+
+    <div id="deal-view" class="deal-view" [hidden]="!isDataLoaded">
+      <div class="block-inner">
+
+        <div class="deal-subinfo">
+          <span class="subinfo-row date-row" *ngIf="dealLastUpdate == '1970-01-01T00:00:00.000Z'">
+            <i class="s s-time"></i> {{ 'Back from postpone' }}
+          </span>
+          <span class="subinfo-row date-row" *ngIf="dealLastUpdate != '1970-01-01T00:00:00.000Z'">
+            <i class="s s-time"></i> {{ dealLastUpdate | amTimeAgo | convertTimeAgo}}
+          </span>
+
+          <span class="subinfo-row user-link-row">
+            <a (click)="showProfileById(dealOwnerId, $event)" class="user-link">
+              <i class="s s-crown"></i>
+              <span>{{ dealOwnerName }}</span>
+            </a>
+            <span [hidden]="!reassignAvailable"> -
+                <a id="reassign-link" [popover]="dealReassignPopover" (click)="username.focus()">Reassign</a>
+                <popover-content #dealReassignPopover placement="bottom" [closeOnClickOutside]="true">
+                  <form name="slimCreatorForm" #f="ngForm" novalidate>
+                      <input type="text" name="queryUser" placeholder="Search user" class="medium ng-pristine ng-invalid ng-invalid-required ng-touched"
+                             #username [(ngModel)]="reassignmentUser.name"  autocomplete="off" required
+                             (keydown)="handleKeyEvent($event, username.value)">
+                  </form>
+                  <div id="assing-user-list" [hidden]="!companyUsers">
+                    <ul class="popover-menu assign-user-list" *ngIf="(!!filteredUsers)">
+                      <li *ngFor="let companyUser of (filteredUsers | CompanyUsersPipe: searchText); let idx = index" tabindex="-1" class="ng-scope">
+                        <a class="popover-item " (click)="selectUser(companyUser.id);" [style.background-color]="idx == focusedIdx ? '#eee' : '#fff'">{{companyUser.username}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </popover-content>
+            </span>
+          </span>
+        </div>
+
+        <div class="deal-comment-adder">
+
+          <div class="user-photo">
+            <a><img src="{{ userAvatar.avatarName }}" style="display: block; max-width: 100%; min-width: 100%; min-height: 100%;"></a>
+          </div>
+
+          <div class="comment-adder-content">
+            <div class="variant-list">
+              <a class="variant-item" [ngClass]="{active: commentFormType == 'internal'}" (click)="changeCommentForm('internal')"><i class="s s-inline s-comment"></i> Internal comment<span class="arrow"></span></a>
+              <a class="variant-item green-item" *ngIf="currentEmail" [ngClass]="{active: commentFormType == 'email'}" (click)="changeCommentForm('email')"><i class="s s-inline s-email"></i>  Send email<span class="arrow"></span></a>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="internal-comment-form" *ngIf="commentFormType == 'internal'">
+          <form name="commentForm.internal" (ngSubmit)="postComment($event, commentTextarea.value); commentForm.form.reset()" #commentForm="ngForm" novalidate>
+            <textarea #commentTextarea [(ngModel)]="newComment" placeholder="What's new about the deal?" id="internal-comment-content" [ngClass]="{active: newComment.length}" name="comment" required autofocus
+            (keydown.control.Enter)="submitCommentButton.click()"></textarea>
+
+          </form>
+
+          <div class="submit-row am-fade-and-slide-top" [hidden]="!newComment.length">
+            <button #submitCommentButton class="btn" (click)="postComment($event, commentTextarea.value)" type="submit" id="submit-internal">Add a new comment</button>
+          </div>
+        </div>
+
+        <create-new-email #createEmailComponentInner [thread]="{length: 0}" [hidden]="commentFormType !== 'email'"></create-new-email>
+
+      </div>
+
+      <div class="comment-list block-inner">
+        <div class="comment-title">
+          Deal history
+        </div>
+
+
+        <div class="comment-item" *ngFor="let comment of comments; let i = index">
+          <div class="comment-photo">
+            <div class="comment-index"> #{{ comments.length - i }}</div>
+
+            <a class="photo" routerLink="/main/user/{{comment.user_id}}">
+              <img *ngIf="comment.post_type !== 1" src="{{ !!comment.avatar_name ? '/server/images/'+comment.avatar_name : '/assets/images/ava.png' }}" style="display: block; max-width: 100%; max-height: 100%; min-height: 100%; min-width: 100%;">
+            </a>
+          </div>
+
+          <div class="comment-content">
+            <div class="comment-date">
+              {{ comment.date | amTimeAgo | convertTimeAgo}}
+            </div>
+
+            <div class="comment-author" *ngIf="comment.username">
+              {{ comment.username }}
+            </div>
+
+            <div class="comment-author" *ngIf="comment.from && !comment.username">
+              {{ comment.from }}
+            </div>
+            <!-- if type of post is system, must add system class -->
+            <div class="comment-body system" *ngIf="comment.post_type == 0 && !comment.from">
+              {{ comment.body | convertTimeAgo }}
+            </div>
+            <div class="comment-body" *ngIf="comment.post_type == 2 && !comment.from">
+              {{ comment.body }}
+            </div>
+
+            <div class="comment-body letter-container" *ngIf="comment.post_type == 1">
+              <p style="cursor: pointer;" (click)="expanded[i] = !expanded[i]">{{comment.subject}}</p>
+              <div [hidden]="!expanded[i]" [innerHtml]="comment.body | safeHtml"></div>
+            </div>
+
+            <div class="inbox-attaches" *ngIf="comment.attaches && comment.attaches.length">
+              <div class="attach-title">
+                Attachments
+              </div>
+              <div class="attach-list">
+                <div class="attach-item" *ngFor="let attach of comment.attaches">
+                  <span class="attach-item-title">{{ attach.name }}</span>
+                  <span class="attach-item-size">({{ attach.size | xBytes }})</span>
+                  <a href="{{ attach.link }}" target="_blank" class="attach-download">Download</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="infinite-loader" [hidden]="commentsLoaded">
+          <div class="loader-inner">
+            <i class="fa fa-cog fa-spin"></i>
+            <br/>loading...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<perfect-scrollbar [config]="config" class="right-sidebar">
+  <div>
+    <label for="new-upload-file" class="upload-contract" (click)="contractInput.value = ''" [style.pointer-events]="uploadedContracts.length ? 'none' : 'auto'">
+      <span class="upload-file-button" [ngClass]="{active: !!uploadedContracts.length}"><i class="fa fa-file-text-o"></i>
+        <div class="button-text" *ngIf="!uploadedContracts.length">upload the<br>deal contract</div>
+        <div class="button-text" *ngIf="uploadedContracts.length">deal contract<br>is uploaded</div>
+      </span>
+    </label>
+    <div class="sidebar-inner" style="padding: 25px;">
+      <div class="lined-block" [hidden]="!uploadedContracts.length">
+        <div class="contacts-title">Uploads</div>
+        <div class="upload-list">
+          <div class="upload-item am-fade-and-slide-top" *ngFor="let uploadItem of uploadedContracts">
+            <a class="upload-item-name" target="_blank" href="/server/contracts/{{uploadItem.contract_uid}}">{{uploadItem.contract_name}}</a>
+            <div class="file-info upload-success" *ngIf="uploadItem.created_at">{{uploadItem.created_at}}</div>
+          </div>
+        </div>
+        <label for="new-upload-file" class="upload-file-link">Add file <i class="fa fa-plus-circle"></i> <input id="new-upload-file" #contractInput type="file"  (change)="uploadFile($event)"></label>
+      </div>
+      <div class="contacts-title-head" style="color: #49516a; font-size: 19px; font-weight: 300; margin-bottom: 10px;">{{dealPartnerName}}</div>
+      <div class="deal-contacts">
+        <div class="contact-list">
+          <div class="contact-item" *ngFor="let contact of contacts; let i = index">
+            <div class="right">
+              <a class="chevron"><i class="fa" id="expanded_icon_20102" [ngClass]="{'fa-chevron-down' : expandedContact[i], 'fa-chevron-up' : !expandedContact[i]}" (click)="expandedContact[i] = !expandedContact[i];"></i></a>
+            </div>
+            <div class="contact-title" (click)="expandedContact[i] = !expandedContact[i]" [class.active]="expandedContact[i]"><i class="s s-user icon"></i> {{contact.contact_name}} <a class="update" (click)="editContact($event, contact)"><i class="s s-edit"></i></a></div>
+            <div [style.display]="expandedContact[i] ? 'block' : 'none'" [class.active]="expandedContact[i]">
+              <div class="contact-fields">
+                <div class="contact-field" *ngFor="let field of contact.fields" [ngClass]=" field.key.substr(0, 'phone'.length) == 'phone' ? 'phone' : field.key">
+                  <div class="contact-field-name"><span class="icon fa"></span></div>
+                  <div class="contact-field-value">
+                    <p style="overflow: hidden;">{{field.value}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a class="btn btn-block" (click)="showCreateContactForm()">Add contact</a>
+      </div>
+    </div>
+  </div>
+</perfect-scrollbar>
+
+<div class="modal fade feasy-modal" bsModal #dealEditModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+  <div class="modal-dialog" style="width:580px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="dealEditModal.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1 class="deal-link-title">Update deal info</h1>
+      </div>
+
+      <div class="modal-body link-deal-container">
+
+        <deal-create (formSubmit)="onUpdateSubmit($event)" [submit]="'update'" [buttonCaption]="'Save Changes'" [inputPartnerName]="currentDealPatnerName" [inputTitle]="currentDealTitle" style="display: block" class="content-inner deal-creator"></deal-create>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<contact-creator #createContactComponent></contact-creator>
+<inbox-deal-linker #inboxDealLinkerComponent></inbox-deal-linker>

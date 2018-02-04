@@ -1,0 +1,30 @@
+<form name="restoreForm" ng-submit="submit()" novalidate>
+  <div class="form">
+    <div class="field-row form-title">
+      Password restoration
+    </div>
+
+    <div class="field-row">
+      <input type="password" placeholder="Enter your password" ng-model="password" name="password" required minlength="8">
+
+      <div ng-messages="restoreForm.password.$error" ng-if="restoreForm.password.$touched || restoreForm.$submitted">
+        <div ng-message="required" class="form-help-error slide-down-help">Password is required field</div>
+        <div ng-message="minlength" class="form-help-error slide-down-help">Password is too short (minimum is 8 characters)</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <input type="password" placeholder="Please, confirm your password" ng-model="confirm" name="confirm" required minlength="8" equals="{{ register.password }}">
+
+      <div ng-messages="restoreForm.confirm.$error" ng-if="restoreForm.confirm.$touched || restoreForm.$submitted">
+        <div ng-message="required" class="form-help-error slide-down-help">Confirmed password cannot be blank</div>
+        <div ng-message="minlength" class="form-help-error slide-down-help">Password confirmation is too short (minimum is 8 characters)</div>
+        <div ng-message="equals" class="form-help-error slide-down-help">Password and confirmation must be same</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <button class="btn btn-block landing-btn" item="button" load-button ng-if="button">Reset password</button>
+    </div>
+  </div>
+</form>

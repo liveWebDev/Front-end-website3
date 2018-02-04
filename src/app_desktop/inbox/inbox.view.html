@@ -1,0 +1,101 @@
+
+<div class="deals-loader" ng-hide="isDataLoaded">
+  <div class="loader-inner">
+    <i class="fa fa-cog fa-3x fa-spin"></i>
+    <br/>loading...
+  </div>
+</div>
+
+<div class="inbox-view" ng-show="isDataLoaded">
+  <div class="right-links">
+    <a
+      ng-show="!deal.id && current.tab != 'trash'"
+      data-title="Delete"
+      data-placement="bottom"
+      ng-click="deleteLetter()"
+      bs-tooltip
+      ><i class="fa fa-trash"></i></a>
+
+    <a
+      data-title="Restore thread"
+      data-placement="bottom"
+      ng-show="current.tab == 'trash'"
+      ng-click="restoreThread()"
+      bs-tooltip
+      ><i class="fa fa-history"></i></a>
+  </div>
+
+  <div class="inbox-title">
+    <div ng-if="current.tab != 'trash'">
+      <deal-linker thread-id="current.id" promise="promise" deal="current.thread.deal" data-template="big" data-placement="bottom"></deal-linker>
+    </div>
+    {{current.thread.subject  || 'No subject' }}
+  </div>
+
+  <email-form item="replyLetter" options="replyOptions" callback="replyCallback"></email-form>
+
+  <div class="comment-list">
+    <div class="deals-loader" ng-hide="isDataUpdated">
+      <div class="loader-inner">
+        <i class="fa fa-cog fa-3x fa-spin"></i>
+        <br/>Checking for new letters in thread...
+      </div>
+    </div>
+
+    <div class="comment-item" ng-repeat="(key,message) in messages">
+      <div class="comment-photo">
+        <div class="comment-index">#{{ current.thread.list.length - $index }}</div>
+
+        <a href="#" class="photo"><i class="fa fa-user"></i></a>
+      </div>
+
+      <div class="comment-content">
+
+        <a
+           class="email-reply"
+           ng-if="email != message.rawFrom"
+           data-template="app_desktop/inbox/reply.popover.html"
+           data-placement="bottom-right"
+           data-trigger="click"
+           data-auto-close="true"
+           bs-popover
+          ><i class="fa fa-reply"></i></a>
+
+        <div class="comment-date">
+          {{ message.date | timeAgo }}
+        </div>
+
+        <div class="comment-author">
+          <span ng-if="!message.fromContact.url">{{ message.from }}</span>
+          <a ng-if="message.fromContact.url" href="{{ message.fromContact.url }}">
+            {{ message.fromContact.name }}
+          </a>
+        </div>
+
+        <div class="comment-cc">
+          <span class="comment-cc-title">To:</span>
+          <span class="recepient" ng-repeat="recepient in message.recepients">
+            <a href="{{ recepient.contact_url }}" title="{{ recepient.address }}" ng-if="recepient.contact_url">{{ recepient.contact_name }}</a><span ng-if="!recepient.contact_url">{{ recepient.name + ' &lt;' + recepient.address + '&gt;'}}</span><span class="recepient-sep" ng-if="!$last">,</span>
+          </span>
+        </div>
+
+        <letter-view body="message.body" promise="promise" class="letter-view"></letter-view>
+
+        <div class="inbox-attaches" ng-if="message.hasAttaches">
+          <div class="attach-title">
+            Attachments
+          </div>
+
+          <div class="attach-list">
+            <div class="attach-item" ng-repeat="attach in message.attaches">
+              <span class="attach-item-title">{{ attach.name }}</span>
+              <span class="attach-item-size">({{ attach.size | bytes }})</span>
+              <a href="{{ attach.url }}" target="_blank" class="attach-download">Download</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+.tooltip {
+  &.tooltip-error {
+
+    .tooltip-inner {
+      padding:10px;
+      background:#FF4C35;
+      max-width: 320px;
+      text-align: left;
+      font-weight:300;
+      font-size:12px;
+
+      p {
+        padding-bottom:5px;
+
+        &:last-child {
+          padding-bottom:0;
+        }
+      }
+    }
+
+    &.top .tooltip-arrow,
+    &.top-left .tooltip-arrow,
+    &.top-right .tooltip-arrow {
+      border-top-color:#FF4C35;
+    }
+
+    &.bottom .tooltip-arrow,
+    &.bottom-left .tooltip-arrow,
+    &.bottom-right .tooltip-arrow {
+      border-bottom-color:#FF4C35;
+    }
+  }
+}

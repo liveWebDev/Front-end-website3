@@ -1,0 +1,19 @@
+<div style="width:270px;" class="popover accept-invite">
+  <div class="arrow"></div>
+  <div class="simple-choice-list medium rounded">
+    <a class="simple-choice-item" ng-class="{active : chosenUser.id == currentUser.user_id}" ng-click="switchUser(currentUser)">
+      Your deals
+    </a>
+    <a class="simple-choice-item" ng-class="{active : !chosenUser.id}" ng-click="switchUser()">
+      All deals
+    </a>
+    <a
+      class="simple-choice-item"
+      ng-repeat="user in users"
+      ng-class="{active: chosenUser.id == user.user_id}"
+      ng-click="switchUser(user)"
+      >
+      {{ user.username }}
+    </a>
+  </div>
+</div>

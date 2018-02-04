@@ -1,0 +1,26 @@
+<div style="width:280px;" class="popover">
+  <div class="arrow"></div>
+
+  <div class="popover-content">
+    <form name="slimCreatorForm" novalidate>
+      <input
+        type="text"
+        name="queryUser"
+        placeholder="Search user"
+        class="medium"
+        ng-model="queryUser"
+        autocomplete="off"
+        required>
+    </form>
+  </div>
+
+  <div style="max-height:200px;" id="assing-user-list">
+    <ul class="popover-menu assign-user-list">
+      <li ng-repeat="companyUser in companyUsers | filter:queryUser">
+        <a class="popover-item" ng-click="selectUser(companyUser)">
+          {{ companyUser.username }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

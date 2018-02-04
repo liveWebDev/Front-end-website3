@@ -1,0 +1,68 @@
+
+<div class="header">
+  <h1>
+    <a class="company-title" ui-sref="main.one_column.deal_index">
+      {{user.currentCompany.title | cut:true:30}}
+      <i class="s s-arrow_right"></i>
+    </a>
+    info
+  </h1>
+</div>
+
+<div class="left-wide-block company-user-block">
+  <div class="block-inner">
+    <div class="new-letter">
+      <user-inviter data-template="button"></user-inviter>
+    </div>
+
+    <div class="search-block search-company-user-block">
+      <input type="text" class="search-input" placeholder="Search user by name" ng-model="searchText">
+      <button class="search-button"><i class="fa fa-search"></i></button>
+    </div>
+  </div>
+
+  <div class="deals-loader" ng-hide="isDataLoaded">
+    <div class="loader-inner">
+      <i class="fa fa-cog fa-3x fa-spin"></i>
+      <br/>loading...
+    </div>
+  </div>
+
+  <table cellpadding="0" cellspacing="0" class="sidebar-table company-user-table" ng-show="isDataLoaded">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td width="90">Status</td>
+        <td width="20"></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="companyUser in users | filter:searchText">
+        <td>
+          <b>{{ companyUser.username }}</b>
+          <span class="user-you" ng-if="companyUser.user_id == user.id">(you)</span>
+        </td>
+
+        <td>
+          {{ roles[companyUser.role] }}
+        </td>
+
+        <td>
+          <change-role company-user="companyUser" remove-callback="excludeUser" ng-if="companyUser.role > 1 && userRole < 3"></change-role>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="right-short-block company-info-block">
+  <div class="block-inner">
+    <h1> {{ company.title }} <a class="update-link" ng-click="updateCompany()"><i class="fa fa-pencil-square-o"></i></a></h1>
+
+    <div class="subtitle">Description</div>
+
+    {{ company.description }}
+  </div>
+
+</div>
+

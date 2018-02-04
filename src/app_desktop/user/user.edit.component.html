@@ -1,0 +1,222 @@
+<div class="block block-clear">
+    <div class="header">
+        <a (click)="goBack()" class="back-link"><i class="s s-back"></i></a>
+        <h1>Edit my profile</h1>
+    </div>
+
+    <perfect-scrollbar [config]="config" style="position: absolute; max-height: calc(100% - 66px); width: 100%;">
+        <div class="tabs content-inner no-padding">
+            <a (click)="changeTab('about')" [ngClass]="currentTab == 'about' ? 'active' : ''"><span>About</span></a>
+            <a (click)="changeTab('credentials')" [ngClass]="currentTab == 'credentials' ? 'active' : ''"><span>Login/Pass</span></a>
+            <a (click)="changeTab('removedFirms')" [ngClass]="currentTab == 'removedFirms' ? 'active' : ''"><span>Removed Firms</span></a>
+        </div>
+
+        <div class="block-inner">
+            <div id="alert-container">
+                <div *ngFor="let alert of alerts">
+                    <alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+                </div>
+            </div>
+            <div [hidden]="(currentTab != 'about')">
+                <form name="aboutForm" (ngSubmit)="userGeneralForm.form.valid && onSubmitGeneralForm()" #userGeneralForm="ngForm" novalidate class="form">
+                    <div class="field-row field-inline">
+                        <label for="about-username">
+                            Full name
+                        </label>
+
+                        <input type="text" placeholder="Fill your full name" [(ngModel)]="generalForm.username" name="username" id="about-username" required #username="ngModel">
+
+                        <div [hidden]="username.valid || username.pristine">
+                            <div class="form-help-error slide-down-help">This is required field</div>
+                        </div>
+
+                    </div>
+
+                    <div class="field-row field-inline">
+                        <label for="about-phone">
+                            Phone
+                        </label>
+
+                        <input type="text" pattern="^\+[0123456789-]{6,18}$" placeholder="" [(ngModel)]="generalForm.phone" name="phone" #phoneNumber="ngModel" id="about-phone">
+                        <div *ngIf="phoneNumber.errors && phoneNumber.dirty">
+                            <div [hidden]="!phoneNumber.errors.pattern" class="form-help-error slide-down-help">
+                                Please, provide a valid phone number in format "+XXXXXXXXXXX"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-row field-inline">
+                        <label for="about-skype">
+                            Skype
+                        </label>
+
+                        <input type="text" placeholder="" [(ngModel)]="generalForm.skype" pattern="^[a-zA-Z][a-zA-Z0-9\.,\-_]{5,31}$" #skype="ngModel" name="skype" id="about-skype">
+                        <div *ngIf="skype.errors && skype.dirty">
+                            <div [hidden]="!skype.errors.pattern" class="form-help-error slide-down-help">
+                                Please, provide a valid skype name
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-row field-inline">
+                        <label for="about-facebook">
+                            Facebook
+                        </label>
+
+                        <input type="text" placeholder="" [(ngModel)]="generalForm.facebook" name="facebook" id="about-facebook" #facebook="ngModel" pattern="^https?:\/\/(www\.)?facebook.com\/[a-zA-Z0-9(\.\?)?]+$">
+                        <div *ngIf="facebook.errors && facebook.dirty">
+                            <div [hidden]="!facebook.errors.pattern" class="form-help-error slide-down-help">
+                                Please, provide a valid web address in format "https://facebook.com/youraddress"
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-row field-inline">
+                        <label for="about-linkedin">
+                            Linkedin
+                        </label>
+
+                        <input type="text" placeholder="" [(ngModel)]="generalForm.linkedin" #linkedin="ngModel" name="linkedin" id="about-linkedin" pattern="^https?:\/\/(www\.)?linkedin.com\/in\/[a-zA-Z0-9(\.\?)?]+$">
+                        <div *ngIf="linkedin.errors && linkedin.dirty">
+                            <div [hidden]="!linkedin.errors.pattern" class="form-help-error slide-down-help">
+                                Please, provide a valid linkedin account address in format "https://linkedin.com/in/youraddress"
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-default" (click)="linkedin._control.markAsDirty(); facebook._control.markAsDirty(); skype._control.markAsDirty(); phoneNumber._control.markAsDirty(); username._control.markAsDirty()">Submit</button>
+
+                </form>
+            </div>
+
+            <div [hidden]="(currentTab != 'credentials')">
+
+                <p>Changing your password or email must be confirmed by entering current password</p>
+                <br>
+                <form action="" name="credentialsForm" (ngSubmit)="onSubmitCredentialForm()" class="form" novalidate>
+                    <div class="field-row field-inline">
+
+                        <input type="password" placeholder="Current password" (input)="credentialsErrors.password = ''" [(ngModel)]="credentialsForm.password" name="password" required #password="ngModel">
+
+                        <div>
+                            <div [hidden]="!credentialsErrors?.password" class="form-help-error slide-down-help">{{credentialsErrors?.password}}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="field-row field-inline">
+
+                        <input type="text" placeholder="Current email" [(ngModel)]="credentialsForm.new_email" (input)="credentialsErrors.new_email = ''" name="new_email" required #new_email="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$" validate-onblur>
+                        <div *ngIf="new_email.errors && (new_email.dirty || new_email.touched)">
+                            <div [hidden]="!new_email.errors.required" class="form-help-error slide-down-help">
+                                Email is required
+                            </div>
+                            <div [hidden]="!new_email.errors.pattern" class="form-help-error slide-down-help">
+                                Email is invalid
+                            </div>
+                        </div>
+                        <div>
+                            <div [hidden]="!credentialsErrors?.new_email" class="form-help-error slide-down-help">{{credentialsErrors?.new_email}}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="field-row field-inline">
+
+                        <input type="password" placeholder="Enter a new password" [(ngModel)]="credentialsForm.new_password" name="new_password" #new_password="ngModel" (input)="credentialsErrors.new_password = ''" minlength="6" validateEqual="newPassRepeat" reverse="true">
+                        <div *ngIf="new_password.errors && new_password.dirty">
+                            <div [hidden]="!new_password.errors.minlength" class="form-help-error slide-down-help">
+                                Password is too short (minimum is 6 character)
+                            </div>
+                        </div>
+                        <div>
+                            <div [hidden]="!credentialsErrors?.new_password" class="form-help-error slide-down-help">{{credentialsErrors?.new_password}}</div>
+                        </div>
+
+                    </div>
+
+                    <div class="field-row field-inline">
+
+                        <input type="password" placeholder="Please, confirm a new password" [(ngModel)]="credentialsForm.newPassRepeat" name="newPassRepeat" #newPassRepeat="ngModel" (input)="credentialsErrors.newPassRepeat = ''" validateEqual="new_password" reverse="false">
+                        <div *ngIf="newPassRepeat.errors && newPassRepeat.touched">
+                            invalid input
+                            <div [hidden]="!newPassRepeat.errors.validateEqual" class="form-help-error slide-down-help">
+                                Password and confirmation must be same
+                            </div>
+                        </div>
+                        <div>
+                            <div [hidden]="!credentialsErrors?.newPassRepeat" class="form-help-error slide-down-help">{{credentialsErrors?.newPassRepeat}}</div>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Submit</button>
+
+                </form>
+
+            </div>
+
+            <div [hidden]="(currentTab != 'removedFirms')">
+                <p>List of deleted companies</p>
+                <br>
+
+                <perfect-scrollbar [config]="config">
+                    <div class="deal-list">
+                        <div class="deal-item deal-list-head" *ngIf="removedCompanies.length">
+                            <div class="deal-advance">
+                                <div class="deal-date" style="width: 100px;">Status</div>
+                                <div class="deal-date" style="width: 134px;"></div>
+                            </div>
+                            Name
+                        </div>
+
+                        <div class="deal-item danger" *ngFor="let company of removedCompanies">
+                            <a class="deal-link">
+                                <div class="deal-advance">
+
+                                <span class="deal-date">
+                                    <span class="date-label" style="background: transparent; color: #d0021b;">Deleted</span>
+                                </span>
+
+                                    <a href="" (click)="requestRestore($event, company.id)" class="btn" style="color: #fff; height: 25px; font-size: 13px; line-height: 22px;">Restore Company</a>
+                                </div>
+
+                                <span class="company-owner" style="line-height: 26px;">{{ company.title }}</span>
+
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="no-deals" [hidden]="removedCompanies.length">
+                        Sorry, there are no such companies here
+                    </div>
+
+                </perfect-scrollbar>
+
+            </div>
+        </div>
+    </perfect-scrollbar>
+</div>
+
+<div class="modal fade feasy-modal" bsModal #restoreWarning="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+    <div class="modal-dialog" style="width:370px;">
+        <div class="modal-content">
+            <div class="feasy-modal-header">
+
+                <button type="button" class="close" aria-label="Close" (click)="restoreWarning.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                <h1>Restore company</h1>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom:20px;">
+                    Are you sure want to restore this company?
+                </div>
+
+                <div style="text-align: center;">
+                    <a class="btn" style="display: inline-block; background: #10d4c6; color: #fff; border: 1px solid #1fbab5; padding: 0 15px; cursor: pointer; height: 33px; line-height: 33px; border-radius: 3px;" (click)="restoreCompany()">Yes, restore this company!</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

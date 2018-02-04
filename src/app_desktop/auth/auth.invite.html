@@ -1,0 +1,37 @@
+<form name="inviteForm" ng-submit="submit()" novalidate>
+  <div class="form">
+    <div class="field-row form-title">
+      {{ invite.firm_name }} invited you
+    </div>
+
+    <div class="field-row">
+      <input type="text" placeholder="Enter your username" ng-model="register.username" name="username" required>
+
+      <div ng-messages="inviteForm.username.$error" ng-if="inviteForm.username.$touched || inviteForm.$submitted">
+        <div ng-message="required" class="form-help-error slide-down-help">Username is required field</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <input type="password" placeholder="Enter your password" ng-model="register.password" name="password" required minlength="5">
+
+      <div ng-messages="inviteForm.password.$error" ng-if="inviteForm.password.$touched || inviteForm.$submitted">
+        <div ng-message="required" class="form-help-error slide-down-help">Password is required field</div>
+        <div ng-message="minlength" class="form-help-error slide-down-help">Password is too short (minimum is 5 characters)</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <input type="password" placeholder="Please, confirm your password" ng-model="register.confirm" name="confirm" required equals="{{ register.password }}">
+
+      <div ng-messages="inviteForm.confirm.$error" ng-if="inviteForm.confirm.$touched || inviteForm.$submitted">
+        <div ng-message="required" class="form-help-error slide-down-help">Confirmed password cannot be blank</div>
+        <div ng-message="equals" class="form-help-error slide-down-help">Password and confirmation must be same</div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <button class="btn btn-block landing-btn">Join a team</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,16 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:580px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1 class="deal-link-title">Update deal info</h1>
+      </div>
+
+      <div class="modal-body link-deal-container">
+
+        <deal-creator submit="updateDealCallback" config="slimConfig" company="currentCompany" deal="deal" data-template="modal"></deal-creator>
+
+      </div>
+    </div>
+  </div>
+</div>

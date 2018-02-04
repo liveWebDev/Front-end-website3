@@ -1,0 +1,57 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:580px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="hideModal()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1 class="deal-link-title">
+          <a ng-class="{active: isCreateDeal}" ng-click="changeOption(true)">Create a new deal</a>
+          or
+          <a ng-class="{active: !isCreateDeal}" ng-click="changeOption(false)">Choose existed one</a>
+        </h1>
+      </div>
+
+      <div class="modal-body link-deal-container">
+
+        <div ng-show="isCreateDeal">
+          <div class="firm-choice">
+            <a class="slim-select firm-input" popover-list items="companies" current-item="currentCompany" promise="companyPromise" callback="changeCompanyCallback">
+              <span class="select-value">{{ currentCompany.title }}</span>
+              <i class="fa fa-caret-down"></i>
+            </a>
+          </div>
+
+          <deal-creator submit="addDealCallback" config="slimConfig" company="currentCompany" data-template="modal"></deal-creator>
+        </div>
+
+        <div ng-show="!isCreateDeal">
+          <form name="form.selectDeal" novalidate autocomplete="off">
+            <div class="deal-creator">
+              <a class="slim-select firm-input" popover-list items="companies" current-item="currentCompany" promise="companyPromise" callback="changeCompanyCallback">
+                <span class="select-value">{{ currentCompany.title }}</span>
+                <i class="fa fa-caret-down"></i>
+              </a>
+
+              <input
+                type="text"
+                name="title"
+                ng-model="item.selected"
+                class="name-input slim"
+                placeholder="Enter deal or partner name"
+                bs-options="deal as deal.fullName for deal in searchDeal($viewValue)"
+                data-min-length="2"
+                bs-typeahead
+                tooltip-validate
+                error-data="errorData.deal"
+                autocomplete="off"
+                is-object
+                required>
+
+              <button class="btn" item="selectDealButton" load-button ng-if="selectDealButton">Link the deal</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

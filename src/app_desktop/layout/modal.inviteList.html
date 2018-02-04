@@ -1,0 +1,26 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:420px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1>Join requests</h1>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom:20px;">
+          You were invited to join a followed companies
+        </div>
+
+        <div class="invite-list">
+          <div class="invite-row" ng-repeat="invite in invites">
+            <div class="invite-buttons">
+              <a ng-click="declineInvite(invite)" class="btn btn-small btn-danger"> <i class="fa fa-times"></i></a><a class="btn btn-small btn-success" ng-click="acceptInvite(invite)"> <i class="fa fa-check"></i></a>
+            </div>
+
+            <div class="invite-company">{{invite.title}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

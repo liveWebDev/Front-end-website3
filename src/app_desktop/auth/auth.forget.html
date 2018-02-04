@@ -1,0 +1,42 @@
+<div ng-show="!sended">
+  <form name="forgetForm" ng-submit="submit()" novalidate>
+    <div class="form">
+      <div class="field-row form-title">
+        Forgot your password?
+      </div>
+
+      <div class="field-row">
+        Enter your email and we'll send you instruction how to restore your password
+      </div>
+
+      <div class="field-row">
+        <input type="email" placeholder="Please, enter your email" ng-model="email" name="email" required check-email>
+
+        <div ng-messages="forgetForm.email.$error" ng-if="forgetForm.email.$touched || forgetForm.$submitted">
+          <div ng-message="required" class="form-help-error slide-down-help">Email is required field</div>
+          <div ng-message="email" class="form-help-error slide-down-help">Email is invalid</div>
+          <div ng-message="wrong" class="form-help-error slide-down-help">Wrong email</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <button class="btn btn-block landing-btn">Reset password</button>
+        <div class="under-button-links">
+          <a ui-sref="noAuth.login" class="forgot-password">I've remembered it</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div ng-show="sended">
+  <div class="form">
+
+    <div class="field-row">
+      Instructions how to restore password was successfully sent you in {{ email }}
+    </div>
+
+    <div class="field-row">
+      <a class="btn btn-block landing-btn" ui-sref="noAuth.login">Ok</a>
+    </div>
+  </div>
+</div>

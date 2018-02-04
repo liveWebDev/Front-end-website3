@@ -1,0 +1,18 @@
+<div style="width:270px;" class="popover accept-invite">
+  <div class="arrow"></div>
+  <div class="popover-content">
+    <div class="invite-list-descr">
+      You were invited to join a followed companies
+    </div>
+
+    <div class="invite-list">
+      <div class="invite-row" ng-repeat="company in user.companies | filter:{role : 4}">
+        <div class="invite-buttons">
+          <a ng-click="declineInvite(company.firm_id)" class="btn btn-small btn-danger"> <i class="fa fa-times"></i></a><a class="btn btn-small btn-success" ng-click="acceptInvite(company.firm_id)"> <i class="fa fa-check"></i></a>
+        </div>
+
+        <div class="invite-company">{{company.title}}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,122 @@
+<div class="block block-clear">
+  <div class="header">
+    <a ui-sref="main.one_column.user_profile({id: oldData.id})" class="back-link"><i class="s s-back"></i></a>
+    <h1>Edit my profile</h1>
+  </div>
+
+  <div class="tabs content-inner no-padding">
+    <a ng-click="changeTab('about')" ng-class="{active:currentTab == 'about'}"><span>About</span></a>
+    <a ng-click="changeTab('credentials')" ng-class="{active:currentTab == 'credentials'}"><span>Login/Pass</span></a>
+  </div>
+
+  <div class="block-inner">
+    <div id="alert-container"></div>
+
+    <div ng-show="currentTab == 'about'">
+    <form name="aboutForm" ng-submit="submitAbout()" novalidate>
+      <div class="form">
+        <div class="field-row field-inline">
+          <label for="about-username">
+            Full name
+          </label>
+
+          <input type="text" placeholder="Fill your full name" ng-model="about.username" name="username" id="about-username" required>
+
+          <div ng-messages="aboutForm.username.$error" ng-if="aboutForm.username.$touched || aboutForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Username is required field</div>
+          </div>
+
+        </div>
+
+
+        <div class="field-row field-inline">
+          <label for="about-phone">
+            Phone
+          </label>
+
+          <input type="text" placeholder="" ng-model="about.phone" name="phone" id="about-phone">
+        </div>
+
+        <div class="field-row field-inline">
+          <label for="about-skype">
+            Skype
+          </label>
+
+          <input type="text" ng-model="about.skype" name="skype" id="about-skype">
+        </div>
+
+        <div class="field-row field-inline">
+          <label for="about-facebook">
+            Facebook
+          </label>
+
+          <input type="text" ng-model="about.facebook" name="facebook" id="about-facebook">
+        </div>
+
+
+        <div class="field-row field-inline">
+          <label for="about-linkedin">
+            Linkedin
+          </label>
+
+          <input type="text" ng-model="about.linkedin" name="linkedin" id="about-linkedin">
+        </div>
+
+        <div class="field-row">
+          <button class="btn btn-large" load-button item="commonButton" ng-if="commonButton">Save</button>
+        </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-show="currentTab == 'credentials'">
+      <form name="credentialsForm" novalidate>
+        <div class="form">
+
+          <div class="field-row">
+            Changing your password or email must be confirmed by entering current password
+          </div>
+
+          <div class="field-row">
+            <input type="password" placeholder="Current password" ng-model="credentials.current_password" name="current_password" required>
+
+            <div ng-messages="credentialsForm.current_password.$error" ng-if="credentialsForm.current_password.$touched || credentialsForm.$submitted">
+              <div ng-message="required" class="form-help-error slide-down-help">It's required field</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <input type="email" placeholder="Please, enter your email" ng-model="credentials.email" name="email" required check-email>
+
+            <div ng-messages="credentialsForm.email.$error" ng-if="credentialsForm.email.$touched || credentialsForm.$submitted">
+              <div ng-message="required" class="form-help-error slide-down-help">Email is required field</div>
+              <div ng-message="email" class="form-help-error slide-down-help">Email is invalid</div>
+              <div ng-message="checkEmail" class="form-help-error slide-down-help">Email is already registered in system</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <input type="password" placeholder="Enter a new password" ng-model="credentials.password" name="password" minlength="6">
+
+            <div ng-messages="credentialsForm.password.$error" ng-if="credentialsForm.password.$touched || credentialsForm.$submitted">
+              <div ng-message="minlength" class="form-help-error slide-down-help">Password is too short (minimum is 6 characters)</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <input type="password" placeholder="Please, confirm a new password" ng-model="credentials.confirm" name="confirm" minlength="6" equals="{{ credentials.password }}">
+
+            <div ng-messages="credentialsForm.confirm.$error" ng-if="credentialsForm.confirm.$touched || credentialsForm.$submitted">
+              <div ng-message="minlength" class="form-help-error slide-down-help">Password confirmation is too short (minimum is 6 characters)</div>
+              <div ng-message="equals" class="form-help-error slide-down-help">Password and confirmation must be same</div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <button class="btn btn-large" load-button item="secureButton" ng-if="secureButton">Confirm</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

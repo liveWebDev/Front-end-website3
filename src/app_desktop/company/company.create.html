@@ -1,0 +1,24 @@
+<div class="block block-clear">
+  <div class="block-inner company-create-form">
+    <form name="companyForm" ng-submit="submit()" novalidate>
+      <div class="form">
+        <h1>Create a new company</h1>
+        <div class="field-row">
+          <input type="text" placeholder="Please put the company name here" ng-model="company.title" name="title" autocomplete="off" required>
+
+          <div ng-messages="companyForm.title.$error" ng-if="companyForm.title.$touched || companyForm.$submitted">
+            <div ng-message="required" class="form-help-error slide-down-help">Title is required field</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <textarea placeholder="Describe your company in a few words, thanks" ng-model="company.description" name="description"></textarea>
+        </div>
+
+        <div class="field-row">
+          <button class="btn btn-large">Create</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

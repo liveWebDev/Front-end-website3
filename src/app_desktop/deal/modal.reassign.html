@@ -1,0 +1,27 @@
+<div class="modal feasy-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width:480px;">
+    <div class="modal-content">
+      <div class="feasy-modal-header">
+
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+        <h1>Reassign deal</h1>
+      </div>
+      <div class="modal-body">
+        <form name="slimCreatorForm" novalidate>
+          <input
+            type="text"
+            name="partner"
+            placeholder="User name"
+            class="partner-input slim"
+            ng-model="item"
+            bs-options="user as user.username for user in searchUser($viewValue)"
+            data-min-length="2"
+            bs-typeahead
+            required>
+        </form>
+        <button class="btn deal-button" item="reassignButton" load-button ng-if="reassignButton" style="margin-top:15px">Reassign deal</button>
+      </div>
+    </div>
+  </div>
+</div>
+

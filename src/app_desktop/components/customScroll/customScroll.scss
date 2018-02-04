@@ -1,0 +1,70 @@
+.mCSB_inside > .mCSB_container {margin-right:0;}
+.mCSB_scrollTools .mCSB_draggerContainer {top:5px; bottom:5px;}
+.mCSB_scrollTools .mCSB_draggerRail {background:none;}
+.sidebar {
+  .ps-container > .ps-scrollbar-y-rail,
+  &.ps-container > .ps-scrollbar-y-rail {
+    background:none;
+
+    &:hover {
+      background:none;
+    }
+
+    & > .ps-scrollbar-y {
+      background: $left-sidebar-font-color-dark;
+      width:4px;
+    }
+  }
+}
+
+.wrapper,
+.global-search-block {
+  .ps-container > .ps-scrollbar-y-rail,
+  &.ps-container > .ps-scrollbar-y-rail {
+    background:none;
+
+    &:hover {
+      background:none;
+    }
+
+    & > .ps-scrollbar-y {
+      background: #797b84;
+      width:7px;
+    }
+  }
+
+}
+
+.deal-view-content,
+.popover-content{
+  .ps-container > .ps-scrollbar-y-rail,
+  &.ps-container > .ps-scrollbar-y-rail {
+    background: none;
+
+    &:hover {
+      background:none;
+    }
+
+    & > .ps-scrollbar-y {
+      background: rgba(87, 93, 112, 0.2);
+      width: 4px;
+    }
+  }
+}
+
+.letter-list,
+.contact-list-block {
+  &.ps-container > .ps-scrollbar-y-rail {
+    background:none;
+
+    &:hover {
+      background:none;
+    }
+
+    & > .ps-scrollbar-y {
+      background: rgba(87, 93, 112, 0.2);
+      width:4px;
+    }
+  }
+}
+

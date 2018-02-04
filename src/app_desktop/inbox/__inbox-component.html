@@ -1,0 +1,108 @@
+
+<div class="inbox-more-block" style="overflow-y: scroll" data-scroll-top-on-change="current.id" id="thread_view">
+    <div class="inbox-right-content" id="inbox-right-content" ui-view>
+
+        <div class="deals-loader" [hidden]="1">
+            <div class="loader-inner">
+                <i class="fa fa-cog fa-3x fa-spin"></i>
+                <br/>loading...
+            </div>
+        </div>
+
+        <div class="inbox-view" [hidden]="!threads">
+            <div class="right-links">
+                <a
+                        [hidden]="!!deal?.id && current.tab == 'trash'"
+                        data-title="Delete"
+                        data-placement="bottom"
+                        ng-click="deleteLetter()"
+                        bs-tooltip
+                ><i class="fa fa-trash"></i></a>
+
+                <a
+                        data-title="Restore thread"
+                        data-placement="bottom"
+                        [hidden]="current.tab != 'trash'"
+                        ng-click="restoreThread()"
+                        bs-tooltip
+                ><i class="fa fa-history"></i></a>
+            </div>
+
+            <div class="inbox-title">
+                <div *ngIf="current.tab != 'trash'">
+                    <div thread-id="current.id" promise="promise" deal="current.thread.deal" data-template="big" data-placement="bottom"></div>
+                </div>
+                {{current?.thread?.subject  || 'No subject' }}
+            </div>
+
+            <div item="replyLetter" options="replyOptions" callback="replyCallback"></div>
+
+            <div class="comment-list">
+                <div class="deals-loader" [hidden]="1">
+                    <div class="loader-inner">
+                        <i class="fa fa-cog fa-3x fa-spin"></i>
+                        <br/>Checking for new letters in thread...
+                    </div>
+                </div>
+
+                <div class="comment-item" *ngFor="let message of messages">
+                    <div class="comment-photo">
+                        <div class="comment-index">#{{ message.length  }}</div>
+
+                        <a href="#" class="photo"><i class="fa fa-user"></i></a>
+                    </div>
+
+                    <div class="comment-content">
+
+                        <a
+                                class="email-reply"
+                                *ngIf="email != message.rawFrom"
+                                data-placement="bottom-right"
+                                data-trigger="click"
+                                data-auto-close="true"
+                                bs-popover>
+                            <!--data-template="app_desktop/inbox/reply.popover.html"-->
+                            <i class="fa fa-reply"></i></a>
+
+                        <div class="comment-date">
+                            {{ message.date }}
+                        </div>
+
+                        <div class="comment-author">
+                            <span *ngIf="!message.fromContact.url">{{ message.from }}</span>
+                            <a *ngIf="message.fromContact.url" href="{{ message.fromContact.url }}">
+                                {{ message.fromContact.name }}
+                            </a>
+                        </div>
+
+                        <div class="comment-cc">
+                            <span class="comment-cc-title">To:</span>
+                            <span class="recepient" *ngFor="let recepient of message.recepients">
+            <a href="{{ recepient.contact_url }}" title="{{ recepient.address }}" *ngIf="recepient.contact_url">{{ recepient.contact_name }}</a><span *ngIf="!recepient.contact_url">{{ recepient.name + ' &lt;' + recepient.address + '&gt;'}}</span><span class="recepient-sep" *ngIf="!$last">,</span>
+          </span>
+                        </div>
+
+                        <div body="message.body" promise="promise" class="letter-view"></div>
+
+                        <div class="inbox-attaches" *ngIf="message.hasAttaches">
+                            <div class="attach-title">
+                                Attachments
+                            </div>
+
+                            <div class="attach-list">
+                                <div class="attach-item" *ngFor="let attach of message.attaches">
+                                    <span class="attach-item-title">{{ attach.name }}</span>
+                                    <span class="attach-item-size">({{ attach.size }})</span>
+                                    <a href="{{ attach.url }}" target="_blank" class="attach-download">Download</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

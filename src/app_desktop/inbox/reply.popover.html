@@ -1,0 +1,15 @@
+<div style="width:160px;" class="popover popover-reply">
+  <div class="arrow"></div>
+  <ul class="popover-menu filled">
+    <li>
+      <a class="popover-item" ng-click="replyTo(message); $hide();">
+        <i class="s s-reply"></i> Reply to {{ (message.from | emailSender:"name") | cut:false:10 }}
+      </a>
+    </li>
+    <li ng-if="message.messageEmails">
+      <a class="popover-item" ng-click="replyToAll(message); $hide()">
+        <i class="s s-reply_all"></i> Reply to all
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,161 @@
+<div class="header">
+    <h1>
+        {{ currentCompanyTitle | slice:0:50 }}
+        <a routerLink="/main/company/{{currentCompanyId}}" class="info-link"><i class="s s-info"></i> Info</a>
+        <a routerLink="/main/company/{{currentCompanyId}}/contacts" class="header-contacts-link"><i class="s s-book"></i> Contacts</a>
+    </h1>
+</div>
+<div class="content">
+    <div class="block block-clear">
+        <div class="tab-filters content-inner">
+            <span class="tab-filter-title">In charge:</span>
+
+            <a class="tab-filter no-arrow" (click)="filterByUser({id: 0})" [ngClass]="{active: 0 == currentUserId}">All</a>
+            <a class="tab-filter" *ngFor="let filterUser of filterUsers" (click)="filterByUser(filterUser)" [ngClass]="{active: filterUser?.id == currentUserId}">
+                {{ filterUser?.username }}
+
+                <span class="counter">
+                    <span class="hot ng-binding">{{ filterUser?.count_deals ? filterUser?.count_deals : 0 }}</span>
+                    <span class="angle"
+                        (click)="stopPropagationNow($event)"
+                        [popover]="userInfoPopover"
+                    >
+                        <i class="fa fa-angle-down"></i>
+                    </span>
+                    <popover-content #userInfoPopover placement="bottom" [closeOnClickOutside]="true">
+                        <ul class="popover-menu">
+                            <li>
+                              <a class="popover-item" (click)="showProfile(filterUser, $event)" style="width: 90px; display: block;">
+                                User info
+                              </a>
+                            </li>
+                          </ul>
+                    </popover-content>
+                </span>
+
+            </a>
+
+            <div class="user-inviter" style="display: inline-block;">
+                <a class="btn btn-outline invite-filter-link" (click)="userInviteModal.show()"><i class="s s-inline s-plus_circle" style="margin-top: -9px;"></i> Send invite</a>
+            </div>
+
+            <div class="modal fade feasy-modal user-invite-modal" bsModal #userInviteModal="bs-modal" [config]="{backdrop: 'static'}" (onHide)="sendInvite.form.reset(); emailError.hide()"
+                 tabindex="-1" role="dialog" aria-labelledby="companyInfo" aria-hidden="true">
+                <div class="modal-dialog" style="width:370px;">
+                    <div class="modal-content">
+                        <div class="feasy-modal-header">
+
+                            <button type="button" class="close" aria-label="Close" (click)="userInviteModal.hide()"><span aria-hidden="true">&times;</span> <span class="close-title">Close</span></button>
+                            <h1>Invite user</h1>
+                        </div>
+                        <div class="modal-body">
+                            <div style="margin-bottom:20px;">
+                                Search for a new company member by email or draft someone who is not on Feasy
+                            </div>
+
+
+                            <form name="form.inviteForm" class="form" (ngSubmit)="inviteUser($event, email.value)" #sendInvite="ngForm" id="invite-form" novalidate>
+                                <button class="btn right-button" type="submit" style="min-width: 65px;">{{ inviting ? '' : 'Invite' }}<i *ngIf="inviting" class="fa fa-cog fa-spin"></i></button>
+                                <input type="email" class="slim" placeholder="Write email" name="invite_email" #inviteInput="ngModel" #email [(ngModel)]="inviteEmail" style="width:250px;"
+                                       tooltip="This email is currently present in company"
+                                       (keydown)="emailError.hide()"
+                                       triggers=""
+                                       #emailError="bs-tooltip"
+                                       placement="bottom" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,20})+$"
+                                       required>
+                                <div *ngIf="inviteInput.errors && inviteSubmitAttempt">
+                                    <div [hidden]="!inviteInput.errors.required" class="form-help-error slide-down-help">
+                                      Email is required
+                                    </div>
+                                </div>
+                                <div *ngIf="inviteInput.errors && inviteInput.dirty">
+                                  <div [hidden]="!inviteInput.errors.pattern" class="form-help-error slide-down-help">
+                                    Email is invalid
+                                  </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div submit="addDealCallback" config="slimConfig" company="currentCompany"></div>
+
+        <deal-create style="display: block" *ngIf="creator < 3" class="content-inner deal-creator"></deal-create>
+
+        <div class="content-inner">
+
+            <div class="deal-index-tabs">
+                <span class="selector-label">Showing deals:</span>
+                <a href="#" (click)="changeTab(1, 'active', $event)" class="btn btn-outline" [ngClass]="{'active': selectedTabState==1}"><span class="counter">{{active_deals}}</span> <span>Active deals</span></a>
+                <a href="#" (click)="changeTab(2, 'postponed', $event)" class="btn btn-outline" [ngClass]="{'active': selectedTabState==2}"><span class="counter">{{postponed_deals}}</span> <span>Postponed deals</span></a>
+                <a href="#" (click)="changeTab(3, 'closed', $event)" class="btn btn-outline" [ngClass]="{'active': selectedTabState==3}"><span class="counter">{{closed_deals}}</span> <span>Closed deals</span></a>
+            </div>
+        </div>
+        <!--deal list-->
+
+        <div class="deal-list" *ngIf="deals" style="height: calc(100% - 178px); position: relative;">
+            <div class="deal-item deal-list-head">
+                <div class="deal-advance">
+                    <div class="deal-actions">Actions</div>
+                    <div class="deal-contract">Contract</div>
+                    <div class="deal-date" style="width: 100px;">Last activity</div>
+                </div>
+
+                Partner + Deal name
+            </div>
+
+            <perfect-scrollbar [config]="config" style="max-height: calc(100vh - 295px); position: absolute; overflow: hidden; width: 100%;">
+                <div class="deal-item" *ngFor="let deal of deals" [class.danger]="deal?.dateDanger" [class.warning]="deal?.dateWarning" (click)="viewDeal(deal.deal_id, $event)">
+                    <a class="deal-link">
+                        <div class="deal-advance">
+
+                            <span class="actions">
+                                {{deal.posts}}
+                            </span>
+
+                            <span class="contract" *ngIf="+deal.contracts>0">
+                                <i class="fa fa-check" style="color: #6CB371"></i>
+                            </span>
+                            <span class="deal-date" *ngIf="deal.date == '1970-01-01T00:00:00.000Z'">
+                                <span>back from postpone</span>
+                                <span class="date-label">{{ 'Back from postpone' }}</span>
+                            </span>
+                            <span class="deal-date" *ngIf="deal.date !== '1970-01-01T00:00:00.000Z' && deal.status !== 2">
+                                <span class="date-label">{{ deal.updated_at | amTimeAgo | convertTimeAgo}}</span>
+                            </span>
+                            <div class="deal-date" *ngIf="deal.date !== '1970-01-01T00:00:00.000Z' && deal.status == 2">
+                                <!-- style="width: {{ deal.timerProgress }}%"-->
+                                <span class="deal-timer">
+                                <span class="deal-timer-progress"></span>
+                                    <!--<span class="deal-timer-text">{{ deal.dayToActive | amDifference }} left</span>-->
+                                <span class="deal-timer-text">{{ (deal.timer | amDifference : today: 'days' : true | number:'1.0-0') + ' days left' | convertTimeAgo}}</span>
+                            </span>
+                            </div>
+                        </div>
+
+                        <div (click)="viewDeal(deal.deal_id, $event)" class="deal-title">
+                            {{deal.partner_name }} +
+                            <span class="deal-name">{{ deal.deal_title  | slice:0:55 }}</span>
+                        </div>
+                    </a>
+                </div>
+            </perfect-scrollbar>
+        </div>
+
+        <div class="deals-loader" [hidden]="!loading">
+            <div class="loader-inner">
+                <i class="fa fa-cog fa-3x fa-spin"></i>
+                <br/>loading...
+            </div>
+        </div>
+
+        <div class="no-deals" [hidden]="!noDeals">
+            Sorry, there are no deals yet
+        </div>
+
+    </div>
+</div>

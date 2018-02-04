@@ -1,0 +1,15 @@
+.user-switcher {
+  float:right;
+  padding:15px 0;
+
+  >.btn {
+    .fa {
+      margin-left:5px;
+      margin-right:0;
+    }
+  }
+
+  .popover.bottom-right {
+    margin-top:12px;
+  }
+}

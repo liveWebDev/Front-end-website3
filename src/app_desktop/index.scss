@@ -1,0 +1,114 @@
+@import "styles/variables";
+@import "styles/mixins";
+@import '../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap';
+@import '../../bower_components/font-awesome/scss/font-awesome';
+@import "styles/reset";
+@import "styles/fonts";
+//@import "styles/animations";
+@import "main/main";
+
+.btn {
+  display: inline-block;
+  background: #10D4C6;
+  color: #fff;
+  border: 1px solid #1FBAB5;
+  padding: 0 15px;
+  text-decoration: none;
+  cursor: pointer;
+  height: 33px;
+  line-height: 33px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  box-shadow: none !important;
+}
+.app-body {
+  background: #000;
+}
+
+.app {
+  font-size:14px;
+  font-family: 'Helvetica', sans-serif;
+  color:$font-color;
+}
+
+.ng-toast {
+  font-size:14px;
+  font-family: 'Helvetica', sans-serif;
+  color:$font-color;
+}
+
+input, select, textarea, button {
+  font-family: 'Helvetica', sans-serif;
+}
+
+a {
+  color:$color-blue;
+  cursor: pointer;
+
+  &.dashed {
+    text-decoration: none;
+    border-bottom:1px dashed;
+  }
+
+  &.dotted {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+  }
+}
+
+@import "styles/buttons";
+@import "styles/forms";
+@import "styles/common";
+
+// injector
+// endinjector
+
+
+@media (min-width: 1280px) {
+  .wrapper {
+    left:$sidebar-width-1280;
+  }
+
+  .sidebar {
+    width:$sidebar-width-1280
+  }
+
+  .global-search-block {
+    left:$sidebar-width-1280;
+  }
+
+  .sidebar .sidebar-list .hot {
+    right:20px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .wrapper {
+    left:$sidebar-width-1600;
+  }
+
+  .sidebar {
+    width:$sidebar-width-1600
+  }
+
+  .global-search-block {
+    left:$sidebar-width-1600;
+  }
+
+  .sidebar .sidebar-list .hot {
+    right:20px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .app {
+    border-left: 150px solid #000;
+    border-right: 150px solid #000;
+  }
+}
+
+.ps-scrollbar-y-rail {
+  display: none;
+}

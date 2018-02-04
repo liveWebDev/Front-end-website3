@@ -1,0 +1,230 @@
+<h1 class="dark" *ngIf="currentAction === 'create'">New message</h1>
+
+<div class="add-comment" style="margin-bottom: 15px;" *ngIf="currentAction !== 'create' && currentAction !== 'reply'">
+    <a href="#" class="user-photo" *ngIf="currentAction === 'create' || thread.length" (click)="replyNow($event)" style="display: block; float: left; width: 30px; height: 30px; background: #797b84; color: #fff; line-height: 30px; text-align: center; border-radius: 15px;"><img src="{{userAvatar.avatarName}}" style="border-radius: 15px; display: block; max-width: 100%;"></a>
+    <div class="form-content" style="margin-left: 45px;">
+        <div class="spoiler-text" *ngIf="currentAction !== 'reply' && currentAction !== 'create' && thread.length" (click)="replyNow($event)" style="color: #b2b2b2; font-weight: 300; line-height: 30px;">Click here to reply</div>
+        <div class="email-from" *ngIf="currentAction === 'reply' || currentAction === 'create'">
+            <span>From:</span> {{currentEmail?.email_address}}
+        </div>
+    </div>
+</div>
+
+<div class="email-form-wrapper" *ngIf="currentAction === 'create' || currentAction === 'reply'">
+    <form name="emailForm" novalidate>
+        <div class="form email-form">
+            <div class="field-row control-row" style="display: flex; justify-content: space-between;">
+                <div class="email-general-control" style="">
+                    <button class="btn btn-white" type="submit" [disabled]="attachmentUploading || emailSending" (click)="sendMail()"  style="min-width: 63px; align-items: center; display: flex; justify-content: center;">
+                            <svg *ngIf="!emailSending" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" xml:space="preserve" stroke="#b8bfd4" fill="#b8bfd4" style="height: 70%; display: inline-block;"><path d="M490.107,1.69L8.275,243.606c-4.862,2.441-8.021,7.323-8.255,12.757c-0.234,5.435,2.491,10.571,7.125,13.421    l112.856,69.45V497c0,6.455,4.129,12.185,10.252,14.228c6.124,2.043,12.865-0.06,16.741-5.221l77.13-102.697l173.004,106.464    c4.199,2.584,9.401,2.94,13.912,0.95c4.512-1.989,7.758-6.069,8.683-10.913l91.983-481.91c0.031-0.16,0.06-0.32,0.086-0.481    C513.759,5.273,501.016-3.93,490.107,1.69z M134.214,312.758L45.785,258.34L398.697,81.152L134.214,312.758z M149.998,452.052    V338.81l248.446-217.561C392.987,128.514,156.496,443.4,149.998,452.052z M394.33,472.83l-152.116-93.61L470.118,75.769    L394.33,472.83z"/></svg>
+                        <i *ngIf="emailSending" class="fa fa-cog fa-spin" style="margin-right: 0;"></i></button>
+                </div>
+                <div class="email-content-control">
+                    <label class="attach-label">
+                        <span class="btn btn-white" style="min-width: 80px; display: flex; align-items: center; justify-content: center;">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 280.067 280.067" xml:space="preserve" stroke="#b8bfd4" fill="#b8bfd4" style="height: 70%; display: inline-block;" *ngIf="!attachmentUploading" class="main-icon"><path d="M149.823,257.142c-31.398,30.698-81.882,30.576-113.105-0.429   c-31.214-30.987-31.337-81.129-0.42-112.308l-0.026-0.018L149.841,31.615l14.203-14.098c23.522-23.356,61.65-23.356,85.172,0   s23.522,61.221,0,84.586l-125.19,123.02l-0.044-0.035c-15.428,14.771-40.018,14.666-55.262-0.394   c-15.244-15.069-15.34-39.361-0.394-54.588l-0.044-0.053l13.94-13.756l69.701-68.843l13.931,13.774l-83.632,82.599   c-7.701,7.596-7.701,19.926,0,27.53s20.188,7.604,27.88,0L235.02,87.987l-0.035-0.026l0.473-0.403   c15.682-15.568,15.682-40.823,0-56.39s-41.094-15.568-56.776,0l-0.42,0.473l-0.026-0.018l-14.194,14.089L50.466,158.485   c-23.522,23.356-23.522,61.221,0,84.577s61.659,23.356,85.163,0l99.375-98.675l14.194-14.089l14.194,14.089l-14.194,14.098   l-99.357,98.675C149.841,257.159,149.823,257.142,149.823,257.142z"/></svg>
+                            <i *ngIf="attachmentUploading" class="fa fa-cog fa-spin" style="margin-right: 0;"></i> </span>
+                        <input type="file" style="display: none;" (change)="uploadAttachment($event)">
+                    </label>
+                </div>
+            </div>
+            <div class="field-row inline-field to-row">
+                <label for="email_to">To:</label>
+                <div class="input-container" droppable (onDrop)="onItemDrop($event, emailList); dragStarted = false">
+                    <span class="email-to-item-container"
+                          *ngFor="let item of emailList.list; let i = index"
+                          style="display: inline-block; margin: 0 4px; background: #47cBFF; color: #000; padding: 0 12px; border-radius: 3px; position: relative;"
+                          draggable
+                          [dragData]="{item: item, originalList: emailList, originalIndex: i}"
+                          (mousedown)="dragStarted = true" (mouseup)="dragStarted = false">{{item}}
+                        <i class="fa fa-angle-down" style="margin-left: 4px; cursor: pointer;" stop-mousedown-propagation [popover]="emailMenu" (click)="checkEmailInContacts(item)"></i>
+                        <popover-content #emailMenu placement="bottom" [closeOnClickOutside]="true" class="email-menu-popover" [style.display]="getPopoverStyleHack()" stop-mousedown-propagation>
+                            <ul class="popover-menu">
+                                <li style="pointer-events: none;">
+                                    <i class="fa fa-check"></i>
+                                    <a class="popover-menu-item">{{item}}</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailMenu.hide(); emailList.input = emailList.pullItem(i); emailToInput.focus()">edit address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailMenu.hide(); emailList.removeItem(i)">remove address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailMenu.hide();" ngxClipboard [cbContent]="item" (cbOnSuccess)="toast({
+                                        timeout: 3000,
+                                        type: 'info',
+                                        message: 'Email copied!'
+                                    });">copy address</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" [ngClass]="{'disabled' : contactExists}" (click)="emailMenu.hide(); addEmailToContacts(emailSenderParser.transform(item))">add to contacts</a>
+                                </li>
+                            </ul>
+                        </popover-content>
+                    </span>
+                    <input id="email_to" name="to" [(ngModel)]="emailList.input" #emailToInput required="" type="text" autocomplete="off" (keypress)="checkForNewItem($event, emailList)" (keyup)="checkForEmailSuggestions(emailList, 'to', $event);" (blur)="emailList.checkAndAppend()" style="display: inline-block; min-width: 120px; max-width: 250px;">
+                    <div class="typeahead dropdown-menu ng-scope am-fade bottom-left" (clickOutside)="emailSuggesiontListFlags.to = false" *ngIf="emailSuggesiontListFlags.to && suggestedContactEmails.length" style="display: block; visibility: visible; left: 45px; min-width: 0;">
+                        <ul class="popover-menu selector-menu">
+                            <li *ngFor="let item of suggestedContactEmails; let i = index" [ngClass]="{'active': i === emailSuggestionActiveIndex}">
+                                <a class="popover-menu-item" (click)="emailList.input = item.email; emailList.checkAndAppend(); emailSuggesiontListFlags.to = false;">{{item.email}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="field-row inline-field to-row">
+                <label for="email1_cc">Cc:</label>
+                <div class="input-container" droppable (onDrop)="onItemDrop($event, emailListCc); dragStarted = false">
+                    <span class="email-to-item-container" *ngFor="let item of emailListCc.list; let i = index" style="display: inline-block; margin: 0 4px; background: #47cBFF; color: #000; padding: 0 12px; border-radius: 3px; position: relative;" draggable [dragData]="{item: item, originalList: emailListCc, originalIndex: i}"  (mousedown)="dragStarted = true" (mouseup)="dragStarted = false">{{item}}<i class="fa fa-angle-down" stop-mousedown-propagation style="margin-left: 4px; cursor: pointer;" [popover]="emailCcMenu" (click)="checkEmailInContacts(item)"></i>
+                        <popover-content #emailCcMenu placement="bottom" [closeOnClickOutside]="true" class="email-menu-popover" [style.display]="getPopoverStyleHack()" stop-mousedown-propagation>
+                            <ul class="popover-menu">
+                                <li style="pointer-events: none;">
+                                    <i class="fa fa-check"></i>
+                                    <a class="popover-menu-item">{{item}}</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailCcMenu.hide(); emailListCc.input = emailListCc.pullItem(i); emailCcInput.focus()">edit address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailCcMenu.hide(); emailListCc.removeItem(i)">remove address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailCcMenu.hide();" ngxClipboard [cbContent]="item" (cbOnSuccess)="toast({
+                                        timeout: 3000,
+                                        type: 'info',
+                                        message: 'Email copied!'
+                                    });">copy address</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" [ngClass]="{'disabled' : contactExists}" (click)="emailCcMenu.hide(); addEmailToContacts(emailSenderParser.transform(item))">add to contacts</a>
+                                </li>
+                            </ul>
+                        </popover-content>
+                    </span>
+                    <input id="email1_cc" [(ngModel)]="emailListCc.input" name="cc" type="email" #emailCcInput autocomplete="off" (keypress)="checkForNewItem($event, emailListCc)" (keyup)="checkForEmailSuggestions(emailListCc, 'cc', $event);" (blur)="emailListCc.checkAndAppend()" style="display: inline-block; min-width: 120px; max-width: 250px;">
+                    <div class="typeahead dropdown-menu ng-scope am-fade bottom-left" (clickOutside)="emailSuggesiontListFlags.cc = false" *ngIf="emailSuggesiontListFlags.cc && suggestedContactEmails.length" style="display: block; visibility: visible; left: 45px; min-width: 0;">
+                        <ul class="popover-menu selector-menu">
+                            <li *ngFor="let item of suggestedContactEmails; let i = index" [ngClass]="{'active': i === emailSuggestionActiveIndex}">
+                                <a class="popover-menu-item" (click)="emailListCc.input = item.email; emailListCc.checkAndAppend(); emailSuggesiontListFlags.cc = false;">{{item.email}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="field-row inline-field bcc-row">
+                <label for="email1_bcc">Bcc:</label>
+                <div class="input-container" style="margin-left: 35px;" droppable (onDrop)="onItemDrop($event, emailListBcc); dragStarted = false">
+                    <span class="email-to-item-container" *ngFor="let item of emailListBcc.list; let i = index" style="display: inline-block; margin: 0 4px; background: #47cBFF; color: #000; padding: 0 12px; border-radius: 3px; position: relative;" draggable [dragData]="{item: item, originalList: emailListBcc, originalIndex: i}" (mousedown)="dragStarted = true" (mouseup)="dragStarted = false">{{item}}<i class="fa fa-angle-down" stop-mousedown-propagation style="margin-left: 4px; cursor: pointer;" [popover]="emailBccMenu" (click)="checkEmailInContacts(item)"></i>
+                        <popover-content #emailBccMenu placement="bottom" [closeOnClickOutside]="true" class="email-menu-popover" [style.display]="getPopoverStyleHack()" stop-mousedown-propagation>
+                            <ul class="popover-menu">
+                                <li style="pointer-events: none;">
+                                    <i class="fa fa-check"></i>
+                                    <a class="popover-menu-item">{{item}}</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailBccMenu.hide(); emailListBcc.input = emailListBcc.pullItem(i); emailCcInput.focus()">edit address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailBccMenu.hide(); emailListCc.removeItem(i)">remove address</a>
+                                </li>
+                                <li>
+                                    <a class="popover-menu-item" (click)="emailBccMenu.hide();" ngxClipboard [cbContent]="item" (cbOnSuccess)="toast({
+                                        timeout: 3000,
+                                        type: 'info',
+                                        message: 'Email copied!'
+                                    });">copy address</a>
+                                </li>
+                                <hr>
+                                <li>
+                                    <a class="popover-menu-item" [ngClass]="{'disabled' : contactExists}" (click)="emailBccMenu.hide(); addEmailToContacts(emailSenderParser.transform(item))">add to contacts</a>
+                                </li>
+                            </ul>
+                        </popover-content>
+                    </span>
+                    <input id="email1_bcc" [(ngModel)]="emailListBcc.input" name="bcc" type="email" #emailBccInput autocomplete="off" (keypress)="checkForNewItem($event, emailListBcc)" (keyup)="checkForEmailSuggestions(emailListBcc, 'bcc', $event);" (blur)="emailListBcc.checkAndAppend()" style="display: inline-block; min-width: 120px; max-width: 250px;">
+                    <div class="typeahead dropdown-menu ng-scope am-fade bottom-left" (clickOutside)="emailSuggesiontListFlags.bcc = false" *ngIf="emailSuggesiontListFlags.bcc && suggestedContactEmails.length" style="display: block; visibility: visible; left: 45px; min-width: 0;">
+                        <ul class="popover-menu selector-menu">
+                            <li *ngFor="let item of suggestedContactEmails; let i = index" [ngClass]="{'active': i === emailSuggestionActiveIndex}">
+                                <a class="popover-menu-item" (click)="emailListBcc.input = item.email; emailListBcc.checkAndAppend(); emailSuggesiontListFlags.bcc = false;">{{item.email}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="field-row inline-field subject-row">
+                <label for="email_subject">Subject:</label>
+                <div class="input-container" style="margin-left: 60px;">
+                    <input id="email_subject" name="subject" type="text" [(ngModel)]="newEmail.subject">
+                </div>
+            </div>
+            <div class="field-row inline-field subject-row">
+                <label for="email_subject">From:</label>
+                <div class="input-container" style="margin-left: 60px;">
+
+                    <a class="slim-select firm-input" [popover]="emailFromList" style="padding-bottom: 0; height: 26px; border-bottom: none;">
+                        <span class="select-value" style="display: inline-block; position: relative; top: -2px;">{{selectedEmailFrom ? selectedEmailFrom.email_address : (currentEmail?.email_address ? currentEmail?.email_address : 'not selected')}}</span> <i class="fa fa-angle-down" *ngIf="suggestedEmailFromList.length"></i>
+                    </a>
+                    <popover-content #emailFromList placement="bottom" [closeOnClickOutside]="true" class="email-menu-popover">
+                        <ul class="popover-menu">
+                            <li *ngFor="let item of suggestedEmailFromList; let i = index" (click)="selectedEmailFrom = item; emailFromList.hide(); updateSignatures()">
+                                <i class="fa fa-check" *ngIf="(selectedEmailFrom && selectedEmailFrom.id === item.id) || (!selectedEmailFrom && currentEmail?.id === item.id)"></i>
+                                <a class="popover-menu-item">{{item.email_address}}</a>
+                            </li>
+                        </ul>
+                    </popover-content>
+
+                </div>
+                <div class="signature-select" style="position: absolute; right: 20px; top: 8px; display: flex;">
+                    <span class="title" style="margin-right: 8px;">Signature: </span>
+                    <div class="signature-dropdown" style="position: relative;" [popover]="signatureMenu">
+                        <div class="signature-selected" style="display: inline-block; margin-right: 18px;">{{(selectedSign ? (selectedSign.name ? selectedSign.name : 'Unnamed') : 'None') | EllipsisSlicePipe:20 }}</div>
+                        <i class="fa fa-angle-down" style="position: absolute; top: 3px; right: 0;"></i>
+                    </div>
+                    <popover-content #signatureMenu placement="bottom" [closeOnClickOutside]="true" class="email-menu-popover">
+                        <ul class="popover-menu">
+                            <li>
+                                <i class="fa fa-check" *ngIf="!selectedSign"></i>
+                                <a class="popover-menu-item" (click)="selectSignature(); signatureMenu.hide();">None</a>
+                            </li>
+                            <hr>
+                            <li *ngFor="let item of signatureList">
+                                <i class="fa fa-check" *ngIf="selectedSign?.id == item.id"></i>
+                                <a class="popover-menu-item" (click)="selectSignature(item); signatureMenu.hide();">{{item.name ? item.name : 'Unnamed'}}</a>
+                            </li>
+                            <hr *ngIf="signatureList.length">
+                            <li>
+                                <a class="popover-menu-item" [ngClass]="{'disabled' : false}" (click)="editSignatures(); signatureMenu.hide()">Edit signatures</a>
+                            </li>
+                        </ul>
+                    </popover-content>
+                </div>
+            </div>
+            <div class="tinyeditor">
+                <div class="sizer">
+                    <app-tinymce [(ngModel)]='newEmail.content' name="content" #tinyEditor (paste)="pasteDataIntoEditor($event)"></app-tinymce>
+                    <span class="resizer"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="email-form-controls" style="display: flex; padding: 10px 0; justify-content: flex-end;">
+
+        <div class="upload-list form-attach-list" style="width: 100%;">
+            <div class="upload-item am-fade-and-slide-top" *ngFor="let uploadItem of uploadItems; let i = index" style="position: relative;">
+                <div class="upload-item-name" style="color: #179bff; overflow: hidden; text-overflow: ellipsis; display: inline-block; padding-right: 15px; position: relative;">
+                    {{uploadItem.filename}}
+                    <a title="Remove {{uploadItem.filename}} from attachment list" (click)="deleteAttach(i)" style="position: absolute; top: 0; right: 0; color: #7A8095;"><i class="fa fa-trash"></i></a>
+                </div>
+                <div class="file-info upload-success" *ngIf="uploadItem.status" style="font-weight: 300; margin-top: 3px;">Uploaded just now</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<signature-editor #signatureEditComponent></signature-editor>

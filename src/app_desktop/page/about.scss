@@ -1,0 +1,59 @@
+@import "../styles/_variables.scss";
+
+.page-wrapper {
+  padding:15px 30px;
+  color:$left-sidebar-font-color-dark;
+
+  .page-head {
+    h1 {
+      font-size:20px;
+      font-weight:500;
+      margin-bottom:25px;
+    }
+  }
+
+  h1 {
+    font-size:27px;
+    font-weight:500;
+    margin-bottom:18px;
+  }
+
+  .large-text {
+    font-size:36px;
+    font-weight:300;
+  }
+
+  h3 {
+    font-size:20px;
+    line-height:26px;
+    margin-bottom:15px;
+  }
+}
+
+.page-content {
+  font-weight:300;
+  color:$left-sidebar-font-color-dark;
+  font-size:14px;
+  line-height: 24px;
+
+  p {
+    margin-bottom:30px;
+  }
+}
+
+.changelog-list {
+  .changelog-item {
+    margin-bottom:15px;
+
+    .changelog-title {
+      font-weight:600;
+    }
+  }
+}
+
+.video-place {
+  width:480px;
+  height:320px;
+  background:#eaeaea;
+  margin:35px 0 40px;
+}
